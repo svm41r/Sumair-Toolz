@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumair Tools 🛡️ — Master Admin Command Center</title>
+    <link rel="icon" type="image/png" href="images/favicon.png?v=6.5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crimson: '#ff003c',
+                        darkBg: '#09090d',
+                        panelDark: '#111118',
+                        cyanAccent: '#00f0ff',
+                        purpleAccent: '#a855f7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Syne', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: #09090d;
+            color: #f4f4f5;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(17, 17, 24, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-crimson {
+            background: linear-gradient(135deg, #ff003c, #b00029);
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn-crimson:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.6);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased p-4 sm:p-8">
+
+    <!-- ACCESS GATE MODAL (SHOWN IF NOT SUPER ADMIN) -->
+    <div id="admin-access-gate" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div class="max-w-md w-full glass-card border-crimson/50 rounded-3xl p-8 text-center shadow-[0_0_60px_rgba(255,0,60,0.3)]">
+            <div class="w-16 h-16 rounded-2xl bg-crimson/20 border border-crimson/40 text-3xl flex items-center justify-center mx-auto mb-4">
+                🛡️
+            </div>
+            <h2 class="font-display font-black text-xl text-white tracking-wider mb-2">MASTER ADMIN GATE</h2>
+            <p id="gate-message" class="text-xs font-mono text-neutral-400 mb-6 leading-relaxed">
+                Checking cryptographic authorization...
+            </p>
+
+            <!-- Direct Admin Sign In Form -->
+            <form id="gate-direct-login-form" onsubmit="handleDirectAdminLogin(event)" class="flex flex-col gap-3 mb-4 text-left">
+                <div>
+                    <label class="block text-[11px] font-mono text-neutral-400 mb-1">ADMIN EMAIL</label>
+                    <input id="gate-admin-email" type="email" value="sumairalisiddiqui@gmail.com" required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-mono text-neutral-400 mb-1">PASSWORD</label>
+                    <input id="gate-admin-password" type="password" placeholder="••••••••••••" required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson">
+                </div>
+                <div id="gate-login-error" class="hidden text-[11px] font-mono text-crimson text-center"></div>
+                <button type="submit" id="gate-submit-btn" class="btn-crimson w-full py-3 text-xs font-mono font-bold tracking-wider mt-1">
+                    🔓 UNLOCK MASTER ADMIN
+                </button>
+            </form>
+
+            <div class="flex flex-col gap-3">
+                <a id="gate-login-btn" href="index.html" class="btn-crimson py-3 px-6 text-xs font-mono font-bold tracking-wider hidden">
+                    RETURN TO SITE & SIGN IN
+                </a>
+                <a href="index.html" class="text-xs font-mono text-neutral-400 hover:text-white transition-colors">
+                    ← Back to Sumair Tools
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN CONTROL CENTER -->
+    <div id="admin-main-content" class="hidden max-w-7xl mx-auto space-y-6">
+
+        <!-- Top Navigation Bar -->
+        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <img src="images/favicon.png?v=6.5" alt="Sumair Tools" class="w-10 h-10 rounded-xl border border-crimson shadow-[0_0_15px_rgba(255,0,60,0.5)]">
+                <div>
+                    <h1 class="font-display font-black text-xl text-white tracking-wider flex items-center gap-2">
+                        SUMAIR TOOLS TELEMETRY <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-crimson text-white">COMMAND CENTER</span>
+                    </h1>
+                    <p class="text-xs font-mono text-neutral-400">HARDWARE LICENSING, CLIENT TELEMETRY & REMOTE REVOCATION</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <div class="text-right hidden sm:block">
+                    <span class="text-[10px] font-mono text-neutral-500 block">AUTHENTICATED SUPER ADMIN</span>
+                    <span id="admin-profile-email" class="text-xs font-mono text-emerald-400 font-bold">sumairalisiddiqui@gmail.com</span>
+                </div>
+                <button onclick="loadAdminData()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-white flex items-center gap-1.5 transition-all">
+                    <span>🔄</span> Refresh
+                </button>
+                <a href="index.html" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono text-white font-bold transition-all flex items-center gap-1.5">
+                    <span>🌐</span> View Website
+                </a>
+            </div>
+        </header>
+
+        <!-- Live Statistics Counter Grid (4 High-Density Stats Cards) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="glass-card p-4 rounded-2xl border-white/10">
+                <span class="text-[10px] font-mono text-neutral-400 uppercase block mb-1">Total Keys Generated</span>
+                <span id="stat-total" class="font-display font-black text-2xl text-white">0</span>
+            </div>
+            <div class="glass-card p-4 rounded-2xl border-emerald-500/30 bg-emerald-500/5">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase block mb-1">Active / In-Use Keys</span>
+                <span id="stat-active" class="font-display font-black text-2xl text-emerald-400">0</span>
+            </div>
+            <div class="glass-card p-4 rounded-2xl border-cyanAccent/30 bg-cyanAccent/5">
+                <span class="text-[10px] font-mono text-cyanAccent uppercase block mb-1">Bound Machines</span>
+                <span id="stat-bound" class="font-display font-black text-2xl text-cyanAccent">0</span>
+            </div>
+            <div class="glass-card p-4 rounded-2xl border-crimson/30 bg-crimson/5">
+                <span class="text-[10px] font-mono text-crimson uppercase block mb-1">Revoked / Suspended</span>
+                <span id="stat-revoked" class="font-display font-black text-2xl text-crimson">0</span>
+            </div>
+        </div>
+
+        <!-- Telemetry Management Panel -->
+        <div class="glass-card p-6 rounded-3xl border-white/10">
+            <!-- Filter & Action Controls -->
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+                <div class="flex items-center gap-3 w-full lg:w-auto flex-wrap">
+                    <input id="admin-search-input" oninput="filterAdmin()" type="text" placeholder="Search by Key, Name, Email, Machine ID..." class="px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson w-full sm:w-72">
+                    <select id="admin-status-filter" onchange="filterAdmin()" class="px-3.5 py-2.5 rounded-xl bg-panelDark border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson">
+                        <option value="all">All Statuses</option>
+                        <option value="active">Active (Bound Workstations)</option>
+                        <option value="unactivated">Approved (Ready to Bind)</option>
+                        <option value="revoked">Revoked</option>
+                        <option value="suspended">Pending Approval</option>
+                    </select>
+                    <div class="flex items-center gap-1.5 bg-panelDark border border-white/15 rounded-xl px-3 py-1">
+                        <span class="text-[10px] font-mono text-neutral-400 font-bold uppercase whitespace-nowrap">Sort By:</span>
+                        <select id="admin-sort-by" onchange="filterAdmin()" class="bg-transparent text-white font-mono text-xs focus:outline-none py-1.5 cursor-pointer">
+                            <option value="created-desc">📅 Newest First (Created ↓)</option>
+                            <option value="created-asc">📅 Oldest First (Created ↑)</option>
+                            <option value="key-asc">🔑 License Key (A → Z)</option>
+                            <option value="key-desc">🔑 License Key (Z → A)</option>
+                            <option value="user-asc">👤 Claimed User (A → Z)</option>
+                            <option value="user-desc">👤 Claimed User (Z → A)</option>
+                            <option value="status-asc">⚡ Status (Active First)</option>
+                            <option value="hwid-bound">🖥️ Bound Machines First</option>
+                            <option value="hwid-unbound">🔓 Unbound First</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <button onclick="generateBatchKeys(50)" class="px-4 py-2 rounded-xl bg-crimson hover:bg-crimson/80 text-white font-mono font-bold text-xs transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,0,60,0.4)] cursor-pointer">
+                        <span>⚡</span> Mint 50 Keys
+                    </button>
+                    <button onclick="batchApprove()" class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-500/50 text-emerald-300 font-mono font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+                        <span>✓</span> Approve All
+                    </button>
+                    <button onclick="batchSuspend()" class="px-3.5 py-2 rounded-xl bg-crimson/20 hover:bg-crimson/35 border border-crimson/50 text-crimson font-mono font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+                        <span>🔒</span> Suspend All
+                    </button>
+                    <button onclick="exportCSV()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                        <span>📥</span> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto rounded-2xl border border-white/10">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-white/5 font-mono text-[10px] text-neutral-400 uppercase border-b border-white/10 select-none">
+                            <th class="py-3 px-4 cursor-pointer hover:text-white transition-colors" onclick="setAdminSort('key')">
+                                <div class="flex items-center gap-1.5">License Key <span id="sort-icon-key" class="text-neutral-500 font-bold">↕</span></div>
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer hover:text-white transition-colors" onclick="setAdminSort('user')">
+                                <div class="flex items-center gap-1.5">Claimed User <span id="sort-icon-user" class="text-neutral-500 font-bold">↕</span></div>
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer hover:text-white transition-colors" onclick="setAdminSort('hwid')">
+                                <div class="flex items-center gap-1.5">Hardware ID <span id="sort-icon-hwid" class="text-neutral-500 font-bold">↕</span></div>
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer hover:text-white transition-colors" onclick="setAdminSort('status')">
+                                <div class="flex items-center gap-1.5">Status <span id="sort-icon-status" class="text-neutral-500 font-bold">↕</span></div>
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer hover:text-white transition-colors" onclick="setAdminSort('created')">
+                                <div class="flex items-center gap-1.5">Created At <span id="sort-icon-created" class="text-crimson font-bold">↓</span></div>
+                            </th>
+                            <th class="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tbody">
+                        <!-- Injected via admin.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/supabase_config.js?v=6.4"></script>
+    <script src="js/auth.js?v=6.4"></script>
+    <script src="js/admin.js?v=6.4"></script>
+    <script src="js/contextMenu.js?v=6.4"></script>
+</body>
+</html>

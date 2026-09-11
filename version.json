@@ -1,0 +1,20 @@
+{
+  "version": "6.5",
+  "badgeText": "VERSION 6.5 MAJOR UPDATE!",
+  "title": "Sumair Tools Cyber Suite v6.5",
+  "date": "2026-09-11",
+  "changelog": [
+    "🚀 Version 6.5 Major Upgrade!",
+    "⚡ Groq Ultra-Fast Cloud AI natively wired in backend (Zero API Key Setup Required)",
+    "🤖 High-Intelligence ExtendScript generation with active Groq models & offline Ollama fallback",
+    "⚡ Caption Pro Sub-Tab 1: Quick Transcribe (Whisper AI, AE timeline build, Auto .SRT to Downloads)",
+    "🎙️ Comp Audio to WAV rendering directly from timeline cuts for 100% transcript sync",
+    "🎯 Comp Saver: Prioritizes selected comp in Project panel & timeline with dependency isolation",
+    "📸 SS to Anim: Screenshot to animation with automatic layout detection & staggered easing",
+    "🪄 Sleek FFX Preset Manager with drag-and-drop & one-click layer apply",
+    "⚡ 2x and 4x Auto Caption Split engine with word-timing preservation",
+    "🛡️ Reentrant safe undo management eliminating AE crashes & undo group mismatches"
+  ],
+  "downloadUrl": "https://sumairtools.online/#download",
+  "zxpUrl": "https://sumairtools.online/SumairTools_v6.5.zxp"
+}
