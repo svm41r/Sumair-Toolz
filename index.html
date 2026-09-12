@@ -1108,7 +1108,7 @@
 
     <!-- TOP NAVIGATION BAR -->
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 md:px-6 py-2.5 sm:py-3 transition-all duration-300">
-        <div class="header-inner max-w-[1440px] w-full mx-auto flex items-center justify-between px-3 sm:px-5 py-2 sm:py-2.5 rounded-full glass-panel border border-white/10 shadow-2xl transition-all duration-300 gap-2 sm:gap-3">
+        <div class="header-inner max-w-7xl w-full mx-auto flex items-center justify-between px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl glass-panel border border-white/10 shadow-2xl transition-all duration-300 gap-2 sm:gap-4">
             
             <!-- Logo & Creator Tag -->
             <a href="#" class="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0" onclick="AudioFX.click()">
@@ -1125,29 +1125,26 @@
             </a>
 
             <!-- Navigation Links (Desktop with Active ScrollSpy - Zero Text Wrapping) -->
-            <nav id="desktop-nav" class="hidden xl:flex items-center gap-1.5 xl:gap-2 2xl:gap-4 text-xs font-mono font-medium text-neutral-300 flex-shrink-0">
-                <a href="#simulator" class="nav-link px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+            <nav id="desktop-nav" class="hidden xl:flex items-center gap-1.5 2xl:gap-3 text-xs font-mono font-medium text-neutral-300 flex-shrink-0">
+                <a href="#simulator" class="nav-link px-2.5 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
                     <span>Simulator</span>
                 </a>
-                <a href="#tutorial" class="nav-link px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
-                    <span>Tutorial</span>
-                </a>
-                <a href="#powerhouses" class="nav-link px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                <a href="#powerhouses" class="nav-link px-2.5 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
                     <span>Engines</span>
                 </a>
-                <a href="#pricing" class="nav-link px-2 py-1 text-crimson font-bold hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                <a href="#pricing" class="nav-link px-2.5 py-1 text-crimson font-bold hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
                     <span>🔥 $1 Deal</span>
                 </a>
-                <a href="#calculator" class="nav-link hidden 2xl:inline-block px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
-                    <span>Calculator</span>
-                </a>
-                <a href="#creator" class="nav-link hidden 2xl:inline-block px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
-                    <span>Creator</span>
-                </a>
-                <a href="#tutorial" class="nav-link px-2 py-1 text-[#7983f5] font-bold hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                <a href="#tutorial" class="nav-link px-2.5 py-1 text-[#7983f5] font-bold hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
                     <span>🎬 Tutorial</span>
                 </a>
-                <a href="#faq" class="nav-link px-2 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                <a href="#calculator" class="nav-link hidden 2xl:inline-block px-2.5 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                    <span>Calculator</span>
+                </a>
+                <a href="#creator" class="nav-link hidden 2xl:inline-block px-2.5 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
+                    <span>Creator</span>
+                </a>
+                <a href="#faq" class="nav-link px-2.5 py-1 hover:text-white transition-colors whitespace-nowrap flex-shrink-0" onclick="AudioFX.click()">
                     <span>FAQ</span>
                 </a>
             </nav>
@@ -1164,7 +1161,7 @@
                 <!-- Master Admin Link (Only activated for sumairalisiddiqui@gmail.com) -->
                 <a id="nav-master-admin-btn" href="admin.html" class="hidden items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl bg-crimson hover:bg-crimson/80 border border-crimson/60 text-xs font-mono font-black text-white transition-all shadow-[0_0_20px_rgba(255,0,60,0.6)] hover:scale-105 flex-shrink-0 animate-pulse" title="Master Admin Command Center">
                     <span class="w-2 h-2 rounded-full bg-white"></span>
-                    <span>🛡️ ADMIN PANEL</span>
+                    <span>🛡️ ADMIN</span>
                 </a>
                 <script>
                     (function() {
@@ -1237,10 +1234,7 @@
                     <span>⚡ Live AE Simulator</span>
                     <span class="text-xs text-crimson">➔</span>
                 </a>
-                <a href="#tutorial" onclick="toggleMobileMenu(); AudioFX.click();" class="px-4 py-3 rounded-xl bg-white/5 hover:bg-crimson/20 border border-white/5 hover:border-crimson/40 text-neutral-200 hover:text-white flex items-center justify-between transition-all">
-                    <span>🎬 Video Tutorial</span>
-                    <span class="text-xs text-crimson">➔</span>
-                </a>
+
                 <a href="#powerhouses" onclick="toggleMobileMenu(); AudioFX.click();" class="px-4 py-3 rounded-xl bg-white/5 hover:bg-crimson/20 border border-white/5 hover:border-crimson/40 text-neutral-200 hover:text-white flex items-center justify-between transition-all">
                     <span>🤖 The 4 Engines</span>
                     <span class="text-xs text-crimson">➔</span>
@@ -1437,7 +1431,7 @@
     <!-- ========================================================================= -->
     <!-- INTERACTIVE LIVE AFTER EFFECTS PANEL SIMULATOR (1:1 REPLICA OF INDEX.HTML) -->
     <!-- ========================================================================= -->
-    <section id="simulator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10">
+    <section id="simulator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10 scroll-mt-24 md:scroll-mt-28">
         <div class="max-w-6xl mx-auto">
             
             <div class="reveal text-center mb-12">
@@ -2465,7 +2459,7 @@ app.endUndoGroup();
     <!-- ========================================================================= -->
     <!-- THE 4 POWERHOUSES (DEEP DIVE 1:1 WITH EXTENSION TABS) -->
     <!-- ========================================================================= -->
-    <section id="powerhouses" class="relative py-20 md:py-32 px-4 sm:px-8 z-10">
+    <section id="powerhouses" class="relative py-20 md:py-32 px-4 sm:px-8 z-10 scroll-mt-24 md:scroll-mt-28">
         <div class="max-w-7xl mx-auto">
             
             <div class="reveal text-center max-w-3xl mx-auto mb-16">
@@ -2636,7 +2630,7 @@ app.endUndoGroup();
     <!-- ========================================================================= -->
     <!-- INTERACTIVE ROI / TIME-SAVED CALCULATOR -->
     <!-- ========================================================================= -->
-    <section id="calculator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10">
+    <section id="calculator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10 scroll-mt-24 md:scroll-mt-28">
         <div class="reveal-scale max-w-5xl mx-auto rounded-3xl glass-panel border border-crimson/30 p-8 sm:p-12 relative overflow-hidden shadow-[0_0_80px_rgba(255,0,60,0.15)] hover:border-crimson/50 transition-all duration-500">
             
             <div class="text-center max-w-2xl mx-auto mb-10">
@@ -2694,7 +2688,7 @@ app.endUndoGroup();
     <!-- ========================================================================= -->
     <!-- CREATOR STORY: LAUNCHED BY SUMAIR ALI SIDDIQUI -->
     <!-- ========================================================================= -->
-    <section id="creator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10">
+    <section id="creator" class="relative py-20 md:py-32 px-4 sm:px-8 z-10 scroll-mt-24 md:scroll-mt-28">
         <div class="reveal-scale max-w-5xl mx-auto rounded-3xl glass-panel border border-white/15 p-8 sm:p-14 relative overflow-hidden hover:border-crimson/30 transition-all duration-500">
             
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
