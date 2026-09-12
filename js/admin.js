@@ -168,7 +168,7 @@
             return;
         }
 
-        // 3. STRICT CREDENTIAL CHECK: Must match Fahad@123
+        // 3. STRICT CREDENTIAL CHECK: Master password validation
         if (password !== MASTER_CREDENTIAL) {
             if (errDiv) {
                 errDiv.innerHTML = '⛔ <b>ACCESS DENIED</b>: Incorrect Master Password.<br><span class="text-[10px] text-neutral-400 mt-1 block">Intrusion attempt logged. Access to license keys and API telemetry is restricted.</span>';

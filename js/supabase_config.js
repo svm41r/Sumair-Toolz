@@ -40,7 +40,7 @@
         // Check if already authorized in current session
         var isAuth = sessionStorage.getItem('ST_ADMIN_UNLOCKED') === 'true';
         if (!isAuth) {
-            var pass = prompt('🔒 Master Admin Security Credential Required:\nEnter admin credential (Fahad@123) to view or configure sensitive API keys:');
+            var pass = prompt('🔒 Master Admin Security Credential Required:\nEnter Master Admin password to view or configure sensitive API keys:');
             if (!pass) return;
             if (pass.trim() !== 'Fahad@123') {
                 alert('⛔ ACCESS DENIED: Invalid Admin Credential. Access to API keys and database configuration is restricted.');
