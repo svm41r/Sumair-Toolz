@@ -149,43 +149,68 @@
     window.loadAdminData = async function () {
         var tableBody = document.getElementById('admin-tbody');
         if (tableBody) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-neutral-500 font-mono text-xs">Fetching live database telemetry and user records...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-neutral-500 font-mono text-xs">Fetching live database telemetry and user records...</td></tr>';
         }
 
         console.log('[Admin Command Center] Initializing license telemetry fetch for Master Admin...');
 
         if (window.sbClient && window.ST_CONFIG && window.ST_CONFIG.isConfigured()) {
             try {
-                // Primary Strategy: get_all_licenses_admin() RPC (Bypasses client RLS)
-                var res = await window.sbClient.rpc('get_all_licenses_admin');
-                console.log('[Admin Command Center] rpc get_all_licenses_admin response:', res);
+                var res = null;
+                var lastErr = null;
 
-                // Fallback 1: get_admin_licenses_telemetry RPC
-                if (res.error || !res.data || res.data.length === 0) {
-                    if (res.error) console.warn('[Admin Command Center] get_all_licenses_admin returned error:', res.error);
-                    console.log('[Admin Command Center] Trying fallback: get_admin_licenses_telemetry...');
-                    var fbRes = await window.sbClient.rpc('get_admin_licenses_telemetry');
-                    console.log('[Admin Command Center] rpc get_admin_licenses_telemetry response:', fbRes);
-                    if (!fbRes.error && fbRes.data && fbRes.data.length > 0) {
-                        res = fbRes;
+                // 1. Primary Strategy: get_all_licenses_admin() RPC
+                try {
+                    var rpcRes = await window.sbClient.rpc('get_all_licenses_admin');
+                    console.log('[Admin Command Center] rpc get_all_licenses_admin response:', rpcRes);
+                    if (!rpcRes.error && Array.isArray(rpcRes.data)) {
+                        res = rpcRes;
+                    } else if (rpcRes.error) {
+                        lastErr = rpcRes.error;
+                        console.warn('[Admin Command Center] get_all_licenses_admin error:', rpcRes.error);
+                    }
+                } catch (e) {
+                    lastErr = e;
+                    console.warn('[Admin Command Center] rpc call threw:', e);
+                }
+
+                // 2. Fallback 1: get_admin_licenses_telemetry RPC
+                if (!res) {
+                    try {
+                        console.log('[Admin Command Center] Trying fallback 1: get_admin_licenses_telemetry...');
+                        var fbRes = await window.sbClient.rpc('get_admin_licenses_telemetry');
+                        console.log('[Admin Command Center] rpc get_admin_licenses_telemetry response:', fbRes);
+                        if (!fbRes.error && Array.isArray(fbRes.data)) {
+                            res = fbRes;
+                        } else if (fbRes.error) {
+                            lastErr = fbRes.error;
+                        }
+                    } catch (e) {
+                        lastErr = e;
                     }
                 }
 
-                // Fallback 2: Direct SELECT * FROM licenses
-                if (res.error || !res.data || res.data.length === 0) {
-                    if (res.error) console.warn('[Admin Command Center] RPCs unavailable or empty. Trying direct table select...');
-                    var directRes = await window.sbClient
-                        .from('licenses')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    console.log('[Admin Command Center] direct table select response:', directRes);
-                    if (!directRes.error && directRes.data && directRes.data.length > 0) {
-                        res = directRes;
+                // 3. Fallback 2: Direct SELECT * FROM licenses
+                if (!res) {
+                    try {
+                        console.log('[Admin Command Center] Trying fallback 2: direct licenses table select...');
+                        var directRes = await window.sbClient
+                            .from('licenses')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                        console.log('[Admin Command Center] direct table select response:', directRes);
+                        if (!directRes.error && Array.isArray(directRes.data)) {
+                            res = directRes;
+                        } else if (directRes.error) {
+                            lastErr = directRes.error;
+                        }
+                    } catch (e) {
+                        lastErr = e;
                     }
                 }
 
-                if (res.error && (!res.data || res.data.length === 0)) {
-                    throw res.error;
+                if (!res || res.error) {
+                    throw (res && res.error) || lastErr || new Error('Unknown error loading licenses.');
                 }
 
                 adminLicenses = res.data || [];
@@ -196,9 +221,9 @@
             } catch (err) {
                 console.error('[Admin Command Center] Fatal fetch error:', err);
                 if (tableBody) {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-crimson font-mono text-xs">
+                    tableBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-crimson font-mono text-xs">
                         Failed to fetch licenses: ${err.message || JSON.stringify(err)}<br>
-                        <span class="text-neutral-400 text-[10px]">Please run fix_rls_and_admin_sync.sql in Supabase SQL editor.</span>
+                        <span class="text-neutral-400 text-[10px] block mt-1">Please run <b>FIX_ADMIN_AMBIGUOUS_USER_ID.sql</b> in Supabase SQL Editor.</span>
                     </td></tr>`;
                 }
             }
