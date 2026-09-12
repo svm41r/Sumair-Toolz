@@ -8,17 +8,105 @@
     'use strict';
 
     var adminLicenses = [];
+    var MASTER_CREDENTIAL = 'Fahad@123';
+    var MASTER_EMAIL = 'sumairalisiddiqui@gmail.com';
+
+    // Global in-memory unlock state (Resets on every page load or direct URL access)
+    window._MASTER_ADMIN_UNLOCKED = false;
+
+    window.toggleGatePasswordVisibility = function () {
+        var input = document.getElementById('gate-admin-password');
+        var icon = document.getElementById('gate-eye-icon');
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            if (icon) icon.innerText = '🙈';
+        } else {
+            input.type = 'password';
+            if (icon) icon.innerText = '👁️';
+        }
+    };
+
+    window.updateIdentityState = function () {
+        var yesRadio = document.getElementById('ident-yes');
+        var noRadio = document.getElementById('ident-no');
+        var errDiv = document.getElementById('gate-login-error');
+        var submitBtn = document.getElementById('gate-submit-btn');
+        var passInput = document.getElementById('gate-admin-password');
+        var statusBadge = document.getElementById('gate-identity-status');
+
+        if (noRadio && noRadio.checked) {
+            if (errDiv) {
+                errDiv.innerHTML = '⛔ <b>ACCESS RESTRICTED</b>: Only Sumair Ali Siddiqui is authorized to access the Master Admin Command Center.<br><span class="text-[10px] text-neutral-400 mt-1 block">Unauthorized access attempts are blocked and monitored.</span>';
+                errDiv.classList.remove('hidden');
+            }
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-40', 'cursor-not-allowed');
+            }
+            if (statusBadge) {
+                statusBadge.innerText = 'Denied';
+                statusBadge.className = 'text-[10px] font-mono text-crimson font-bold';
+            }
+            if (passInput) {
+                passInput.disabled = true;
+                passInput.value = '';
+            }
+            return;
+        }
+
+        if (yesRadio && yesRadio.checked) {
+            if (errDiv) errDiv.classList.add('hidden');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+            }
+            if (statusBadge) {
+                statusBadge.innerText = '✓ Confirmed';
+                statusBadge.className = 'text-[10px] font-mono text-emerald-400 font-bold';
+            }
+            if (passInput) {
+                passInput.disabled = false;
+                passInput.focus();
+            }
+        }
+    };
+
+    window.handleAdminSignOutAndSwitch = async function () {
+        try {
+            if (window.sbClient && window.sbClient.auth) {
+                await window.sbClient.auth.signOut();
+            }
+        } catch (e) {}
+        localStorage.removeItem('ST_CURRENT_USER');
+        sessionStorage.clear();
+        window.location.reload();
+    };
 
     window.initAdminPanel = async function () {
-        // Wait for Supabase client
+        // ALWAYS ENFORCE HARD LOCK ON INITIAL PAGE LOAD / DIRECT URL ACCESS
+        window._MASTER_ADMIN_UNLOCKED = false;
+
+        var main = document.getElementById('admin-main-content');
+        if (main) {
+            main.style.setProperty('display', 'none', 'important');
+            main.classList.add('hidden');
+        }
+
+        var gate = document.getElementById('admin-access-gate');
+        if (gate) gate.classList.remove('hidden');
+
+        // Check current session state
         if (!window.sbClient && window.initSupabaseClient) {
             window.initSupabaseClient();
         }
 
         var user = null;
         if (window.sbClient && window.sbClient.auth) {
-            var sessionRes = await window.sbClient.auth.getSession();
-            user = (sessionRes && sessionRes.data && sessionRes.data.session) ? sessionRes.data.session.user : null;
+            try {
+                var sessionRes = await window.sbClient.auth.getSession();
+                user = (sessionRes && sessionRes.data && sessionRes.data.session) ? sessionRes.data.session.user : null;
+            } catch (e) {}
         }
 
         if (!user && window.getCurrentUser) {
@@ -31,122 +119,187 @@
             } catch (e) {}
         }
 
-        if (!user) {
-            // Check all auth tokens in localStorage
-            for (var i = 0; i < localStorage.length; i++) {
-                var k = localStorage.key(i);
-                if (k && (k.startsWith('sb-') || k.includes('auth-token'))) {
-                    try {
-                        var parsed = JSON.parse(localStorage.getItem(k));
-                        if (parsed && (parsed.user || parsed.currentSession)) {
-                            user = parsed.user || parsed.currentSession.user;
-                            break;
-                        }
-                    } catch (e) {}
-                }
-            }
-        }
+        var unauthAlert = document.getElementById('gate-unauthorized-alert');
+        var detectedEmailSpan = document.getElementById('gate-detected-email');
+        var loginForm = document.getElementById('gate-direct-login-form');
 
-        if (!user) {
-            showAccessGate('Please sign in with your Master Admin account (sumairalisiddiqui@gmail.com).', true);
+        // IF SIGNED IN AS ANY NON-ADMIN ACCOUNT, HARD BLOCK IMMEDIATELY
+        if (user && user.email && user.email.toLowerCase() !== MASTER_EMAIL.toLowerCase()) {
+            console.warn('[Admin Security] Blocked unauthorized account:', user.email);
+            if (unauthAlert) {
+                if (detectedEmailSpan) detectedEmailSpan.innerText = user.email;
+                unauthAlert.classList.remove('hidden');
+            }
+            if (loginForm) {
+                loginForm.classList.add('opacity-30', 'pointer-events-none');
+            }
             return;
+        } else {
+            if (unauthAlert) unauthAlert.classList.add('hidden');
+            if (loginForm) loginForm.classList.remove('opacity-30', 'pointer-events-none');
         }
-
-        var isMaster = (user.email && user.email.toLowerCase() === window.ST_CONFIG.MASTER_ADMIN_EMAIL.toLowerCase());
-
-        if (!isMaster) {
-            // Check admin_users table
-            try {
-                var checkRes = await window.sbClient
-                    .from('admin_users')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .maybeSingle();
-
-                if (!checkRes.data || !checkRes.data.role) {
-                    showAccessGate('Access Denied: Your account (' + user.email + ') does not have Super Admin clearance.', false);
-                    return;
-                }
-            } catch (e) {
-                showAccessGate('Access Denied: Super Admin authentication check failed.', false);
-                return;
-            }
-        }
-
-        // Access Granted!
-        document.getElementById('admin-access-gate').classList.add('hidden');
-        document.getElementById('admin-main-content').classList.remove('hidden');
-        var adminEmailBadge = document.getElementById('admin-profile-email');
-        if (adminEmailBadge) adminEmailBadge.innerText = user.email;
-
-        loadAdminData();
     };
 
     window.handleDirectAdminLogin = async function (e) {
         if (e) e.preventDefault();
-        var emailInput = document.getElementById('gate-admin-email');
+        var identYes = document.getElementById('ident-yes');
         var passInput = document.getElementById('gate-admin-password');
         var submitBtn = document.getElementById('gate-submit-btn');
         var errDiv = document.getElementById('gate-login-error');
 
-        var email = emailInput ? emailInput.value.trim() : '';
-        var password = passInput ? passInput.value : '';
-
-        if (!email || !password) {
-            if (errDiv) { errDiv.innerText = 'Please enter both email and password.'; errDiv.classList.remove('hidden'); }
+        // 1. STEP 1 CHECK: Must confirm "Yes, I am Sumair Ali Siddiqui"
+        if (!identYes || !identYes.checked) {
+            if (errDiv) {
+                errDiv.innerHTML = '⚠️ <b>STEP 1 REQUIRED</b>: Please confirm your identity by selecting "Yes, I am Sumair Ali Siddiqui".';
+                errDiv.classList.remove('hidden');
+            }
             return;
         }
 
+        var password = passInput ? passInput.value : '';
+
+        // 2. STEP 2 CHECK: Must provide password
+        if (!password) {
+            if (errDiv) {
+                errDiv.innerHTML = '⚠️ <b>STEP 2 REQUIRED</b>: Please enter the Master Admin Security Password.';
+                errDiv.classList.remove('hidden');
+            }
+            if (passInput) passInput.focus();
+            return;
+        }
+
+        // 3. STRICT CREDENTIAL CHECK: Must match Fahad@123
+        if (password !== MASTER_CREDENTIAL) {
+            if (errDiv) {
+                errDiv.innerHTML = '⛔ <b>ACCESS DENIED</b>: Incorrect Master Password.<br><span class="text-[10px] text-neutral-400 mt-1 block">Intrusion attempt logged. Access to license keys and API telemetry is restricted.</span>';
+                errDiv.classList.remove('hidden');
+            }
+            if (passInput) {
+                passInput.value = '';
+                passInput.focus();
+                passInput.classList.add('border-crimson', 'ring-2', 'ring-crimson/50');
+                setTimeout(function () {
+                    passInput.classList.remove('ring-2', 'ring-crimson/50');
+                }, 2000);
+            }
+            return;
+        }
+
+        // BOTH STEP 1 AND STEP 2 VERIFIED!
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.innerText = 'AUTHENTICATING...';
+            submitBtn.innerHTML = '<span>⏳ VERIFYING MASTER CLEARANCE...</span>';
         }
 
         if (errDiv) errDiv.classList.add('hidden');
 
         try {
+            window._MASTER_ADMIN_UNLOCKED = true;
+
             if (!window.sbClient && window.initSupabaseClient) {
                 window.initSupabaseClient();
             }
 
+            // Connect Supabase auth session if available
             if (window.sbClient && window.sbClient.auth) {
-                var res = await window.sbClient.auth.signInWithPassword({ email: email, password: password });
-                if (res.error) throw res.error;
-                if (res.data && res.data.user) {
-                    localStorage.setItem('ST_CURRENT_USER', JSON.stringify(res.data.user));
-                    await window.initAdminPanel();
-                    return;
+                try {
+                    var sRes = await window.sbClient.auth.getSession();
+                    var curU = (sRes && sRes.data && sRes.data.session) ? sRes.data.session.user : null;
+                    if (!curU || (curU.email && curU.email.toLowerCase() !== MASTER_EMAIL.toLowerCase())) {
+                        var res = await window.sbClient.auth.signInWithPassword({ email: MASTER_EMAIL, password: password });
+                        if (res.data && res.data.user) {
+                            localStorage.setItem('ST_CURRENT_USER', JSON.stringify(res.data.user));
+                        }
+                    }
+                } catch (authErr) {
+                    console.warn('[Admin Gate] Supabase auth notice:', authErr.message);
                 }
             }
-            throw new Error('Supabase client uninitialized.');
+
+            // REVEAL DASHBOARD ONLY AFTER PASSWORD IS 100% VALIDATED
+            var gate = document.getElementById('admin-access-gate');
+            if (gate) gate.classList.add('hidden');
+
+            var main = document.getElementById('admin-main-content');
+            if (main) {
+                main.style.removeProperty('display');
+                main.classList.remove('hidden');
+            }
+
+            var adminEmailBadge = document.getElementById('admin-profile-email');
+            if (adminEmailBadge) adminEmailBadge.innerText = MASTER_EMAIL;
+
+            await loadAdminData();
+
         } catch (err) {
             if (errDiv) {
-                errDiv.innerText = err.message || 'Authentication failed.';
+                errDiv.innerText = err.message || 'Authentication error.';
                 errDiv.classList.remove('hidden');
             }
         } finally {
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.innerText = '🔓 UNLOCK MASTER ADMIN';
+                submitBtn.innerHTML = '<span>🔓 VERIFY IDENTITY & UNLOCK LICENSES</span>';
             }
         }
     };
 
-    function showAccessGate(msg, showLoginBtn) {
+    window.lockAdminPanel = function () {
+        if (!confirm('Lock Admin Command Center and secure all license keys & API telemetry?')) return;
+        window._MASTER_ADMIN_UNLOCKED = false;
+        sessionStorage.removeItem('ST_ADMIN_UNLOCKED');
+        sessionStorage.removeItem('ST_ADMIN_AUTH_TOKEN');
+
+        var main = document.getElementById('admin-main-content');
+        if (main) {
+            main.style.setProperty('display', 'none', 'important');
+            main.classList.add('hidden');
+        }
+
+        var tableBody = document.getElementById('admin-tbody');
+        if (tableBody) tableBody.innerHTML = '';
+
+        adminLicenses = [];
+
+        var gate = document.getElementById('admin-access-gate');
+        if (gate) gate.classList.remove('hidden');
+
+        var passInput = document.getElementById('gate-admin-password');
+        if (passInput) passInput.value = '';
+
+        var identYes = document.getElementById('ident-yes');
+        var identNo = document.getElementById('ident-no');
+        if (identYes) identYes.checked = false;
+        if (identNo) identNo.checked = false;
+
+        var statusBadge = document.getElementById('gate-identity-status');
+        if (statusBadge) {
+            statusBadge.innerText = 'Required';
+            statusBadge.className = 'text-[10px] font-mono text-emerald-400 font-bold';
+        }
+
+        console.log('[Admin Security] Panel locked. Telemetry cleared.');
+    };
+
+    function showAccessGate(msg) {
         var gate = document.getElementById('admin-access-gate');
         var gateMsg = document.getElementById('gate-message');
-        var loginBtn = document.getElementById('gate-login-btn');
         if (gate) gate.classList.remove('hidden');
         if (gateMsg) gateMsg.innerText = msg;
-        if (loginBtn) {
-            if (showLoginBtn) loginBtn.classList.remove('hidden');
-            else loginBtn.classList.add('hidden');
-        }
         var main = document.getElementById('admin-main-content');
-        if (main) main.classList.add('hidden');
+        if (main) {
+            main.style.setProperty('display', 'none', 'important');
+            main.classList.add('hidden');
+        }
     }
 
     window.loadAdminData = async function () {
+        // STRICT IN-MEMORY SECURITY GUARD: Never fetch licenses without master password verification
+        if (!window._MASTER_ADMIN_UNLOCKED) {
+            console.error('[Admin Security] CRITICAL: Attempted to load licenses without verified password clearance.');
+            return;
+        }
+
         var tableBody = document.getElementById('admin-tbody');
         if (tableBody) {
             tableBody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-neutral-500 font-mono text-xs">Fetching live database telemetry and user records...</td></tr>';

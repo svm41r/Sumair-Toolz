@@ -57,46 +57,128 @@
 </head>
 <body class="font-sans antialiased p-4 sm:p-8">
 
-    <!-- ACCESS GATE MODAL (SHOWN IF NOT SUPER ADMIN) -->
-    <div id="admin-access-gate" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4">
-        <div class="max-w-md w-full glass-card border-crimson/50 rounded-3xl p-8 text-center shadow-[0_0_60px_rgba(255,0,60,0.3)]">
-            <div class="w-16 h-16 rounded-2xl bg-crimson/20 border border-crimson/40 text-3xl flex items-center justify-center mx-auto mb-4">
+    <!-- ACCESS GATE MODAL (ALWAYS ENFORCED — NEVER AUTO-BYPASS) -->
+    <div id="admin-access-gate" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-lg w-full glass-card border-crimson/60 rounded-3xl p-6 sm:p-8 text-center shadow-[0_0_100px_rgba(255,0,60,0.4)] relative overflow-hidden my-auto">
+            <!-- Top security accent line -->
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-crimson to-transparent animate-pulse"></div>
+
+            <div class="w-16 h-16 rounded-2xl bg-crimson/20 border border-crimson/50 text-3xl flex items-center justify-center mx-auto mb-3 shadow-[0_0_30px_rgba(255,0,60,0.4)]">
                 🛡️
             </div>
-            <h2 class="font-display font-black text-xl text-white tracking-wider mb-2">MASTER ADMIN GATE</h2>
-            <p id="gate-message" class="text-xs font-mono text-neutral-400 mb-6 leading-relaxed">
-                Checking cryptographic authorization...
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-mono font-black tracking-widest uppercase bg-crimson/20 border border-crimson/50 text-crimson mb-2">
+                <span class="w-2 h-2 rounded-full bg-crimson animate-ping"></span> RESTRICTED MASTER CLEARANCE
+            </div>
+            <h2 class="font-display font-black text-2xl text-white tracking-wider mb-2">MASTER ADMIN SECURITY GATE</h2>
+            <p id="gate-message" class="text-xs font-mono text-neutral-400 mb-5 leading-relaxed">
+                Contains sensitive license keys, hardware bindings, and system API configurations. Dual verification required for access.
             </p>
 
+            <!-- Unauthorized Account Banner (Shown if someone is logged in with non-admin email) -->
+            <div id="gate-unauthorized-alert" class="hidden mb-5 p-4 rounded-2xl bg-crimson/15 border border-crimson/60 text-left">
+                <div class="flex items-start gap-3">
+                    <span class="text-xl">⛔</span>
+                    <div>
+                        <div class="font-bold text-crimson text-xs font-mono uppercase">UNAUTHORIZED ACCOUNT DETECTED</div>
+                        <div class="text-[11px] text-neutral-300 font-mono mt-1" id="gate-unauthorized-email-msg">
+                            You are currently signed in as <span class="text-white font-bold underline" id="gate-detected-email">user@example.com</span>.
+                        </div>
+                        <p class="text-[10px] text-neutral-400 font-mono mt-1.5 leading-normal">
+                            Only Sumair Ali Siddiqui (<span class="text-white font-bold">sumairalisiddiqui@gmail.com</span>) has authorization to view license keys and API telemetry.
+                        </p>
+                        <div class="mt-3 flex items-center gap-2 flex-wrap">
+                            <button type="button" onclick="handleAdminSignOutAndSwitch()" class="px-3 py-1.5 rounded-xl bg-crimson hover:bg-crimson/80 text-white text-xs font-mono font-bold transition-all cursor-pointer shadow-md">
+                                Sign Out & Switch Account
+                            </button>
+                            <a href="index.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-neutral-300 text-xs font-mono font-bold transition-all">
+                                Return to Site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Direct Admin Sign In Form -->
-            <form id="gate-direct-login-form" onsubmit="handleDirectAdminLogin(event)" class="flex flex-col gap-3 mb-4 text-left">
-                <div>
-                    <label class="block text-[11px] font-mono text-neutral-400 mb-1">ADMIN EMAIL</label>
-                    <input id="gate-admin-email" type="email" value="sumairalisiddiqui@gmail.com" required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson">
+            <form id="gate-direct-login-form" onsubmit="handleDirectAdminLogin(event)" class="space-y-4 text-left">
+                
+                <!-- STEP 1: IDENTITY CONFIRMATION -->
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono font-bold text-crimson tracking-wider uppercase flex items-center gap-1.5">
+                            <span class="w-4 h-4 rounded-full bg-crimson/20 border border-crimson/40 text-center text-[10px] leading-4 text-crimson font-bold inline-block">1</span>
+                            STEP 1: IDENTITY CONFIRMATION
+                        </span>
+                        <span class="text-[10px] font-mono text-emerald-400 font-bold" id="gate-identity-status">Required</span>
+                    </div>
+
+                    <label class="block text-xs font-mono font-bold text-white">
+                        Are you Sumair Ali Siddiqui?
+                    </label>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/15 hover:border-crimson cursor-pointer transition-all has-[:checked]:border-crimson has-[:checked]:bg-crimson/15">
+                            <input type="radio" name="admin_identity_confirm" value="yes" id="ident-yes" required class="accent-crimson w-4 h-4" onchange="updateIdentityState()">
+                            <span class="text-xs font-mono text-white font-bold leading-tight">Yes, I am Sumair Ali Siddiqui</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white/5 border border-white/15 hover:border-neutral-500 cursor-pointer transition-all has-[:checked]:border-neutral-500 has-[:checked]:bg-white/10">
+                            <input type="radio" name="admin_identity_confirm" value="no" id="ident-no" class="accent-neutral-500 w-4 h-4" onchange="updateIdentityState()">
+                            <span class="text-xs font-mono text-neutral-400 font-bold leading-tight">No, someone else</span>
+                        </label>
+                    </div>
+
+                    <!-- Email Field (Locked to Master Admin) -->
+                    <div id="gate-email-box" class="pt-2">
+                        <label class="block text-[10px] font-mono text-neutral-400 uppercase mb-1">Authorized Master Admin Email</label>
+                        <div class="relative">
+                            <input id="gate-admin-email" type="email" value="sumairalisiddiqui@gmail.com" readonly class="w-full px-4 py-2 rounded-xl bg-black/40 border border-white/15 text-neutral-300 font-mono text-xs cursor-not-allowed select-none focus:outline-none">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-400 text-[11px] font-mono font-bold">🔒 VERIFIED</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-[11px] font-mono text-neutral-400 mb-1">PASSWORD</label>
-                    <input id="gate-admin-password" type="password" placeholder="••••••••••••" required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson">
+
+                <!-- STEP 2: MASTER PASSWORD VERIFICATION -->
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono font-bold text-crimson tracking-wider uppercase flex items-center gap-1.5">
+                            <span class="w-4 h-4 rounded-full bg-crimson/20 border border-crimson/40 text-center text-[10px] leading-4 text-crimson font-bold inline-block">2</span>
+                            STEP 2: MASTER PASSWORD
+                        </span>
+                        <span class="text-[10px] font-mono text-neutral-500">Required: Fahad@123</span>
+                    </div>
+
+                    <label class="block text-xs font-mono font-bold text-white">
+                        Enter Master Admin Security Password
+                    </label>
+
+                    <div class="relative">
+                        <input id="gate-admin-password" type="password" placeholder="Enter password (Fahad@123)..." required autocomplete="current-password" class="w-full pl-4 pr-11 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-crimson transition-all">
+                        <button type="button" onclick="toggleGatePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white text-xs cursor-pointer select-none" id="gate-eye-btn" title="Toggle password visibility">
+                            <span id="gate-eye-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
-                <div id="gate-login-error" class="hidden text-[11px] font-mono text-crimson text-center"></div>
-                <button type="submit" id="gate-submit-btn" class="btn-crimson w-full py-3 text-xs font-mono font-bold tracking-wider mt-1">
-                    🔓 UNLOCK MASTER ADMIN
+
+                <!-- Error Message Box -->
+                <div id="gate-login-error" class="hidden p-3.5 rounded-xl bg-crimson/15 border border-crimson/40 text-xs font-mono text-crimson text-center leading-relaxed"></div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="gate-submit-btn" class="btn-crimson w-full py-3.5 text-xs font-mono font-black tracking-wider cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,0,60,0.4)]">
+                    <span>🔓</span>
+                    <span>VERIFY IDENTITY & UNLOCK LICENSES</span>
                 </button>
             </form>
 
-            <div class="flex flex-col gap-3">
-                <a id="gate-login-btn" href="index.html" class="btn-crimson py-3 px-6 text-xs font-mono font-bold tracking-wider hidden">
-                    RETURN TO SITE & SIGN IN
+            <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+                <a href="index.html" class="text-xs font-mono text-neutral-400 hover:text-white transition-colors flex items-center gap-1.5">
+                    <span>←</span> Back to Main Website
                 </a>
-                <a href="index.html" class="text-xs font-mono text-neutral-400 hover:text-white transition-colors">
-                    ← Back to Sumair Tools
-                </a>
+                <span class="text-[10px] font-mono text-neutral-500">Sumair Tools Security v6.5</span>
             </div>
         </div>
     </div>
 
-    <!-- MAIN ADMIN CONTROL CENTER -->
-    <div id="admin-main-content" class="hidden max-w-7xl mx-auto space-y-6">
+    <!-- MAIN ADMIN CONTROL CENTER (HARD LOCKED WITH INLINE DISPLAY NONE) -->
+    <div id="admin-main-content" style="display: none !important;" class="hidden max-w-7xl mx-auto space-y-6">
 
         <!-- Top Navigation Bar -->
         <header class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 pb-6 border-b border-white/10">
@@ -135,7 +217,11 @@
                         <span>🔄</span>
                         <span>Refresh</span>
                     </button>
-                    <a href="index.html" class="px-3.5 py-2.5 rounded-xl bg-crimson/20 hover:bg-crimson/30 border border-crimson/50 text-xs font-mono text-white font-bold transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,0,60,0.25)] whitespace-nowrap cursor-pointer">
+                    <button onclick="lockAdminPanel()" class="px-3.5 py-2.5 rounded-xl bg-crimson/20 hover:bg-crimson/30 border border-crimson/50 text-xs font-mono text-crimson hover:text-white font-bold transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,0,60,0.25)] whitespace-nowrap cursor-pointer" title="Lock Admin Panel and clear session">
+                        <span>🔒</span>
+                        <span>Lock Panel</span>
+                    </button>
+                    <a href="index.html" class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-white font-bold transition-all hover:border-white/30 hover:scale-105 active:scale-95 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
                         <span>🌐</span>
                         <span>View Website</span>
                     </a>

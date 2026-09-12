@@ -36,6 +36,19 @@
     window.openConfigModal = function () {
         var modal = document.getElementById('st-config-modal');
         if (!modal) return;
+
+        // Check if already authorized in current session
+        var isAuth = sessionStorage.getItem('ST_ADMIN_UNLOCKED') === 'true';
+        if (!isAuth) {
+            var pass = prompt('🔒 Master Admin Security Credential Required:\nEnter admin credential (Fahad@123) to view or configure sensitive API keys:');
+            if (!pass) return;
+            if (pass.trim() !== 'Fahad@123') {
+                alert('⛔ ACCESS DENIED: Invalid Admin Credential. Access to API keys and database configuration is restricted.');
+                return;
+            }
+            sessionStorage.setItem('ST_ADMIN_UNLOCKED', 'true');
+        }
+
         var urlInput = document.getElementById('cfg-supabase-url');
         var keyInput = document.getElementById('cfg-supabase-key');
         if (urlInput) urlInput.value = window.ST_CONFIG.SUPABASE_URL || DEFAULT_URL;
