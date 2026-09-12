@@ -99,27 +99,47 @@
     <div id="admin-main-content" class="hidden max-w-7xl mx-auto space-y-6">
 
         <!-- Top Navigation Bar -->
-        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
-            <div class="flex items-center gap-3">
-                <img src="images/favicon.png?v=6.5" alt="Sumair Tools" class="w-10 h-10 rounded-xl border border-crimson shadow-[0_0_15px_rgba(255,0,60,0.5)]">
-                <div>
-                    <h1 class="font-display font-black text-xl text-white tracking-wider flex items-center gap-2">
-                        SUMAIR TOOLS TELEMETRY <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-crimson text-white">COMMAND CENTER</span>
-                    </h1>
-                    <p class="text-xs font-mono text-neutral-400">HARDWARE LICENSING, CLIENT TELEMETRY & REMOTE REVOCATION</p>
+        <header class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 pb-6 border-b border-white/10">
+            <!-- Brand & Telemetry Title -->
+            <div class="flex items-center gap-3.5 min-w-0">
+                <img src="images/favicon.png?v=6.5" alt="Sumair Tools" class="w-11 h-11 rounded-xl border border-crimson/60 shadow-[0_0_20px_rgba(255,0,60,0.4)] flex-shrink-0 object-cover">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h1 class="font-display font-black text-xl sm:text-2xl text-white tracking-wider whitespace-nowrap">
+                            SUMAIR TOOLS TELEMETRY
+                        </h1>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-mono font-black tracking-widest uppercase bg-crimson/20 border border-crimson/60 text-crimson shadow-[0_0_12px_rgba(255,0,60,0.3)] whitespace-nowrap flex-shrink-0">
+                            COMMAND CENTER
+                        </span>
+                    </div>
+                    <p class="text-[11px] font-mono text-neutral-400 mt-0.5 tracking-wide">
+                        HARDWARE LICENSING &bull; CLIENT TELEMETRY &bull; REMOTE REVOCATION
+                    </p>
                 </div>
             </div>
-            <div class="flex items-center gap-3 flex-wrap">
-                <div class="text-right hidden sm:block">
-                    <span class="text-[10px] font-mono text-neutral-500 block">AUTHENTICATED SUPER ADMIN</span>
-                    <span id="admin-profile-email" class="text-xs font-mono text-emerald-400 font-bold">sumairalisiddiqui@gmail.com</span>
+
+            <!-- Super Admin Info & Controls (Never Wrap Weirdly) -->
+            <div class="flex items-center gap-3 flex-wrap sm:flex-nowrap w-full xl:w-auto justify-between xl:justify-end">
+                <!-- Super Admin Authenticated Card -->
+                <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/10 shadow-inner flex-shrink-0">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0 shadow-[0_0_8px_#34d399]"></span>
+                    <div class="text-left">
+                        <span class="text-[9px] font-mono uppercase tracking-widest text-neutral-400 font-bold block leading-tight mb-0.5">AUTHENTICATED SUPER ADMIN</span>
+                        <span id="admin-profile-email" class="text-xs font-mono text-emerald-400 font-bold block leading-tight truncate max-w-[220px]">sumairalisiddiqui@gmail.com</span>
+                    </div>
                 </div>
-                <button onclick="loadAdminData()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-white flex items-center gap-1.5 transition-all">
-                    <span>🔄</span> Refresh
-                </button>
-                <a href="index.html" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono text-white font-bold transition-all flex items-center gap-1.5">
-                    <span>🌐</span> View Website
-                </a>
+
+                <!-- Action Button Group (Always together) -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button onclick="loadAdminData()" class="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono font-bold text-white flex items-center gap-1.5 transition-all hover:border-white/30 cursor-pointer whitespace-nowrap shadow-sm hover:scale-105 active:scale-95">
+                        <span>🔄</span>
+                        <span>Refresh</span>
+                    </button>
+                    <a href="index.html" class="px-3.5 py-2.5 rounded-xl bg-crimson/20 hover:bg-crimson/30 border border-crimson/50 text-xs font-mono text-white font-bold transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,0,60,0.25)] whitespace-nowrap cursor-pointer">
+                        <span>🌐</span>
+                        <span>View Website</span>
+                    </a>
+                </div>
             </div>
         </header>
 
