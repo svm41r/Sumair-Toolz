@@ -3305,8 +3305,57 @@ app.endUndoGroup();
         </div>
     </footer>
 
+    
+    <!-- FLOATING AMBIENT BACKGROUND MUSIC DOCK (MOBILE-OPTIMIZED) -->
+    <div id="bg-music-dock" class="fixed bottom-3 sm:bottom-5 left-3 sm:left-5 z-50 flex items-center gap-2 p-1.5 sm:p-2 rounded-2xl glass-panel border border-crimson/40 shadow-[0_10px_35px_rgba(0,0,0,0.9)] backdrop-blur-2xl transition-all duration-300 max-w-[92vw] sm:max-w-md">
+        
+        <!-- Rotating Vinyl / Equalizer Disc -->
+        <button type="button" onclick="BgMusicPlayer.togglePlay()" class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-full bg-gradient-to-br from-neutral-900 to-black border border-crimson/50 flex items-center justify-center flex-shrink-0 cursor-pointer shadow-[0_0_15px_rgba(255,0,60,0.4)]" title="Play / Pause Ambient Music">
+            <svg id="music-disc-icon" class="w-4 h-4 sm:w-5 sm:h-5 text-crimson transition-transform duration-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
+                <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                <path d="M12 2a10 10 0 0 1 10 10" stroke="#ff003c" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            <span id="music-play-status-dot" class="absolute -top-0.5 -right-0.5 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-neutral-600 border border-black transition-colors"></span>
+        </button>
+
+        <!-- Track Info & Explicit Mention to Shuffle Below -->
+        <div class="flex flex-col min-w-0 pr-1 sm:pr-2">
+            <div class="flex items-center gap-1.5">
+                <span class="text-[11px] sm:text-xs font-mono font-bold text-white truncate max-w-[110px] xs:max-w-[140px] sm:max-w-[180px]" id="music-track-title">
+                    Paradise (Instrumental)
+                </span>
+                <span class="text-[9px] font-mono font-semibold text-neutral-400 truncate hidden md:inline" id="music-track-artist">
+                    • DJ Snake
+                </span>
+            </div>
+            <!-- Explicit Instruction Mention Below (As requested by user) -->
+            <div class="flex items-center gap-1 text-[8.5px] sm:text-[10px] font-mono text-neutral-400 leading-tight">
+                <span class="text-crimson font-bold">♪ Instrumental</span>
+                <span>•</span>
+                <span class="text-neutral-300 flex items-center gap-0.5">Click <span class="text-white font-bold">🔀</span> below to change song</span>
+            </div>
+        </div>
+
+        <!-- Play / Pause Action Button -->
+        <button type="button" id="music-play-btn" onclick="BgMusicPlayer.togglePlay()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-full bg-white/5 hover:bg-crimson/20 border border-white/10 hover:border-crimson text-white flex items-center justify-center text-xs transition-all hover:scale-105 flex-shrink-0 cursor-pointer" title="Play / Pause">
+            <span id="music-play-icon">▶</span>
+        </button>
+
+        <!-- Prominent Shuffle Button with Icon -->
+        <button type="button" id="music-shuffle-btn" onclick="BgMusicPlayer.shuffle()" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-full bg-crimson/20 hover:bg-crimson border border-crimson/60 hover:border-crimson text-white text-xs font-mono font-bold flex items-center gap-1 transition-all hover:scale-105 shadow-[0_0_12px_rgba(255,0,60,0.3)] flex-shrink-0 cursor-pointer" title="Shuffle / Change Song">
+            <span class="text-xs sm:text-sm">🔀</span>
+            <span class="text-[9px] sm:text-[10px] font-black tracking-tight hidden xs:inline">SHUFFLE</span>
+        </button>
+
+        <!-- Mute / Volume Toggle -->
+        <button type="button" id="music-volume-btn" onclick="BgMusicPlayer.toggleMute()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-neutral-300 hover:text-white flex items-center justify-center text-xs transition-all flex-shrink-0 cursor-pointer" title="Mute / Unmute">
+            <span id="music-vol-icon">🔊</span>
+        </button>
+    </div>
+
     <!-- FLOATING CYBER SOUNDBOARD & STATUS DOCK -->
-    <div class="fixed bottom-5 right-5 z-50 flex items-center gap-2 p-2 rounded-full glass-panel border border-crimson/40 shadow-[0_0_30px_rgba(255,0,60,0.35)] backdrop-blur-2xl">
+    <div class="fixed bottom-3 sm:bottom-5 right-3 sm:right-5 z-40 hidden sm:flex items-center gap-2 p-2 rounded-full glass-panel border border-crimson/40 shadow-[0_0_30px_rgba(255,0,60,0.35)] backdrop-blur-2xl">
         <!-- Live Mini Equalizer Visualizer -->
         <div class="flex items-center gap-1 px-2.5 py-1.5 bg-black/50 rounded-full border border-white/10" title="Live Audio Visualizer">
             <span class="equalizer-bar" style="height: 11px; animation-delay: 0.1s;"></span>
@@ -5586,6 +5635,247 @@ app.endUndoGroup();
             window.addEventListener('load', detectAndRevealAdmin);
             setInterval(detectAndRevealAdmin, 800);
         })();
+    </script>
+
+
+    <!-- Ambient Background Music Player Engine -->
+    <style>
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 4s linear infinite;
+        }
+    </style>
+    <script>
+        const BgMusicPlayer = {
+            playlist: [
+    {
+        "file": "audio/dj_snake_paradise.mp3",
+        "title": "Paradise (Instrumental)",
+        "artist": "DJ Snake"
+    },
+    {
+        "file": "audio/mj_billie_jean.mp3",
+        "title": "Billie Jean (Instrumental)",
+        "artist": "Michael Jackson"
+    },
+    {
+        "file": "audio/write_this_down_chill.mp3",
+        "title": "Write This Down (Chill Beat)",
+        "artist": "Hip Hop Classics"
+    },
+    {
+        "file": "audio/raamiz_bahanay.mp3",
+        "title": "Bahanay (Chill Instrumental)",
+        "artist": "Raamiz Rizvi"
+    },
+    {
+        "file": "audio/mj_dont_stop.mp3",
+        "title": "Don't Stop Til You Get Enough",
+        "artist": "Michael Jackson"
+    },
+    {
+        "file": "audio/gunna_p_power.mp3",
+        "title": "P Power (Instrumental)",
+        "artist": "Gunna ft. Drake"
+    },
+    {
+        "file": "audio/esdeekid_4_raws.mp3",
+        "title": "4 Raws (Instrumental)",
+        "artist": "EsDeeKid"
+    },
+    {
+        "file": "audio/mj_smooth_criminal.mp3",
+        "title": "Smooth Criminal (Instrumental)",
+        "artist": "Michael Jackson"
+    },
+    {
+        "file": "audio/montagem_alquimia.mp3",
+        "title": "Montagem Alquimia (Phonk)",
+        "artist": "Phonk Brazil"
+    },
+    {
+        "file": "audio/juicy_j_riley.mp3",
+        "title": "Riley (Remix Instrumental)",
+        "artist": "Juicy J"
+    },
+    {
+        "file": "audio/lex_amarni_the_kill_2.mp3",
+        "title": "The Kill 2 (Instrumental)",
+        "artist": "Lex Amarni"
+    },
+    {
+        "file": "audio/rick_ross_stay_schemin.mp3",
+        "title": "Stay Schemin (Instrumental)",
+        "artist": "Rick Ross"
+    }
+],
+            currentIndex: 0,
+            audio: null,
+            isPlaying: false,
+            isMuted: false,
+            hasInteracted: false,
+
+            init() {
+                if (this.audio) return;
+                this.audio = new Audio();
+                this.audio.preload = "auto";
+                this.audio.volume = 0.28; // Pleasant ambient background volume
+
+                // Random initial track
+                this.currentIndex = Math.floor(Math.random() * this.playlist.length);
+                this.loadTrack(this.currentIndex, false);
+
+                // Auto-advance when song finishes
+                this.audio.addEventListener('ended', () => {
+                    this.shuffle(true);
+                });
+
+                // Check stored mute preference
+                if (localStorage.getItem('sumair_bg_music_muted') === 'true') {
+                    this.isMuted = true;
+                    this.audio.muted = true;
+                    this.updateUI();
+                }
+
+                // Smooth Autoplay on first user interaction anywhere on the website
+                const startOnInteraction = () => {
+                    if (!this.hasInteracted) {
+                        this.hasInteracted = true;
+                        if (!this.isPlaying && localStorage.getItem('sumair_bg_music_paused') !== 'true') {
+                            this.play();
+                        }
+                    }
+                    window.removeEventListener('click', startOnInteraction);
+                    window.removeEventListener('keydown', startOnInteraction);
+                    window.removeEventListener('touchstart', startOnInteraction);
+                };
+                window.addEventListener('click', startOnInteraction, { once: true });
+                window.addEventListener('keydown', startOnInteraction, { once: true });
+                window.addEventListener('touchstart', startOnInteraction, { once: true });
+            },
+
+            loadTrack(index, autoPlay = true) {
+                this.init();
+                const track = this.playlist[index];
+                if (!track) return;
+
+                this.audio.src = track.file;
+                this.updateUI();
+
+                if (autoPlay) {
+                    this.play();
+                }
+            },
+
+            play() {
+                this.init();
+                this.audio.play().then(() => {
+                    this.isPlaying = true;
+                    localStorage.removeItem('sumair_bg_music_paused');
+                    this.updateUI();
+                }).catch(err => {
+                    // Browser prevented autoplay before interaction
+                    this.isPlaying = false;
+                    this.updateUI();
+                });
+            },
+
+            pause() {
+                if (this.audio) {
+                    this.audio.pause();
+                }
+                this.isPlaying = false;
+                localStorage.setItem('sumair_bg_music_paused', 'true');
+                this.updateUI();
+            },
+
+            togglePlay() {
+                this.init();
+                if (this.isPlaying) {
+                    this.pause();
+                } else {
+                    this.play();
+                }
+            },
+
+            shuffle(isAuto = false) {
+                this.init();
+                let nextIndex = Math.floor(Math.random() * this.playlist.length);
+                if (this.playlist.length > 1 && nextIndex === this.currentIndex) {
+                    nextIndex = (this.currentIndex + 1) % this.playlist.length;
+                }
+                this.currentIndex = nextIndex;
+                this.loadTrack(this.currentIndex, true);
+
+                if (!isAuto && typeof AudioFX !== 'undefined' && AudioFX.click) {
+                    AudioFX.click();
+                }
+
+                const track = this.playlist[this.currentIndex];
+                if (typeof triggerSimExecutionToast === 'function') {
+                    triggerSimExecutionToast('🎵 Now Playing: ' + track.title);
+                }
+            },
+
+            toggleMute() {
+                this.init();
+                this.isMuted = !this.isMuted;
+                this.audio.muted = this.isMuted;
+                localStorage.setItem('sumair_bg_music_muted', this.isMuted ? 'true' : 'false');
+                this.updateUI();
+            },
+
+            updateUI() {
+                const track = this.playlist[this.currentIndex];
+                const titleEl = document.getElementById('music-track-title');
+                const artistEl = document.getElementById('music-track-artist');
+                const playIconEl = document.getElementById('music-play-icon');
+                const discIconEl = document.getElementById('music-disc-icon');
+                const statusDotEl = document.getElementById('music-play-status-dot');
+                const volIconEl = document.getElementById('music-vol-icon');
+
+                if (track) {
+                    if (titleEl) titleEl.textContent = track.title;
+                    if (artistEl) artistEl.textContent = '• ' + track.artist;
+                }
+
+                if (playIconEl) {
+                    playIconEl.textContent = this.isPlaying ? '⏸' : '▶';
+                }
+
+                if (discIconEl) {
+                    if (this.isPlaying) {
+                        discIconEl.classList.add('animate-spin-slow');
+                        discIconEl.style.color = '#ff003c';
+                    } else {
+                        discIconEl.classList.remove('animate-spin-slow');
+                        discIconEl.style.color = '#888888';
+                    }
+                }
+
+                if (statusDotEl) {
+                    if (this.isPlaying) {
+                        statusDotEl.className = 'absolute -top-0.5 -right-0.5 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-emerald-400 border border-black shadow-[0_0_8px_#34d399] animate-pulse';
+                    } else {
+                        statusDotEl.className = 'absolute -top-0.5 -right-0.5 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-neutral-600 border border-black';
+                    }
+                }
+
+                if (volIconEl) {
+                    volIconEl.textContent = this.isMuted ? '🔇' : '🔊';
+                }
+            }
+        };
+
+        // Initialize Background Music Engine on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => BgMusicPlayer.init());
+        } else {
+            BgMusicPlayer.init();
+        }
     </script>
 
 </body>
