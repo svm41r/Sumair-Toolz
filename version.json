@@ -1,20 +1,20 @@
 {
-  "version": "6.5",
-  "badgeText": "VERSION 6.5 MAJOR UPDATE!",
-  "title": "Sumair Tools Cyber Suite v6.5",
-  "date": "2026-09-11",
+  "version": "7.0",
+  "badgeText": "VERSION 7.0 MOTION GRAPHS UPDATE!",
+  "title": "Sumair Tools Cyber Suite v7.0",
+  "date": "2026-09-14",
   "changelog": [
-    "🚀 Version 6.5 Major Upgrade!",
-    "⚡ Groq Ultra-Fast Cloud AI natively wired in backend (Zero API Key Setup Required)",
-    "🤖 High-Intelligence ExtendScript generation with active Groq models & offline Ollama fallback",
-    "⚡ Caption Pro Sub-Tab 1: Quick Transcribe (Whisper AI, AE timeline build, Auto .SRT to Downloads)",
-    "🎙️ Comp Audio to WAV rendering directly from timeline cuts for 100% transcript sync",
-    "🎯 Comp Saver: Prioritizes selected comp in Project panel & timeline with dependency isolation",
-    "📸 SS to Anim: Screenshot to animation with automatic layout detection & staggered easing",
-    "🪄 Sleek FFX Preset Manager with drag-and-drop & one-click layer apply",
-    "⚡ 2x and 4x Auto Caption Split engine with word-timing preservation",
-    "🛡️ Reentrant safe undo management eliminating AE crashes & undo group mismatches"
+    "🚀 Version 7.0 Motion Graphs & AI Update!",
+    "📈 7th Tab: Motion Graph Easing Engine with JerryFlow & Flow dual-pass velocity slope calculations",
+    "⚡ 21 Bezier Curve Preset slots, Time Remap Ramps, Category Filter Pills & live curve syncing",
+    "🎨 Auto Process All Captions: Vibrant Cyan & Purple cadence coloring with persistent fill locks",
+    "🔄 Smart Swap Selected: Chronological pairing with single/lone cyan layer skip protection",
+    "🎙️ Quick Transcribe: Output Mode options (Build in AE Timeline, Drop on Current Layer, or Save SRT Only)",
+    "⏱️ Zero-warning audio rendering: Dynamic comp.displayStartTime synchronization for non-zero timecodes",
+    "⚡ Direct Groq Whisper AI Engine (whisper-large-v3-turbo) with real-time live terminal logging",
+    "🤖 High-Intelligence ExtendScript AI generation with active Groq models & offline Ollama fallback",
+    "📸 SS to Anim: Screenshot to animation with automatic layout detection & staggered easing"
   ],
   "downloadUrl": "https://sumairtools.online/#download",
-  "zxpUrl": "https://sumairtools.online/SumairTools_v6.5.zxp"
+  "zxpUrl": "https://sumairtools.online/SumairTools_v7.0.zxp"
 }
