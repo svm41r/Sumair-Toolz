@@ -139,22 +139,22 @@
         var navDownloadBtn = document.getElementById('nav-download-btn');
         var navDownloadText = document.getElementById('nav-download-btn-text');
         if (navDownloadText) {
-            navDownloadText.innerText = isAuth ? 'DOWNLOAD v6.5' : 'SIGN IN TO DOWNLOAD';
+            navDownloadText.innerText = isAuth ? 'DOWNLOAD v7.0' : 'SIGN IN TO DOWNLOAD';
         }
         if (navDownloadBtn) {
-            navDownloadBtn.title = isAuth ? 'Download Sumair Tools v6.5 (.zxp)' : 'Sign In to Download Sumair Tools';
+            navDownloadBtn.title = isAuth ? 'Download Sumair Tools v7.0 (.zxp)' : 'Sign In to Download Sumair Tools';
         }
 
         // 2. Mobile Nav Download Button
         var mobileDownloadText = document.getElementById('mobile-nav-download-btn-text');
         if (mobileDownloadText) {
-            mobileDownloadText.innerText = isAuth ? 'DOWNLOAD v6.5' : 'SIGN IN TO DOWNLOAD';
+            mobileDownloadText.innerText = isAuth ? 'DOWNLOAD v7.0' : 'SIGN IN TO DOWNLOAD';
         }
 
         // 3. Hero Section CTA Button
         var heroDownloadText = document.getElementById('hero-download-btn-text');
         if (heroDownloadText) {
-            heroDownloadText.innerText = isAuth ? 'DOWNLOAD v6.5 (.ZXP)' : 'SIGN IN TO DOWNLOAD';
+            heroDownloadText.innerText = isAuth ? 'DOWNLOAD v7.0 (.ZXP)' : 'SIGN IN TO DOWNLOAD';
         }
 
         // 4. Download Hub Section Card
@@ -166,7 +166,7 @@
         // 5. Footer Link
         var footerDownloadText = document.getElementById('footer-download-text');
         if (footerDownloadText) {
-            footerDownloadText.innerText = isAuth ? 'Download v6.5 (.ZXP)' : 'Sign In to Download';
+            footerDownloadText.innerText = isAuth ? 'Download v7.0 (.ZXP)' : 'Sign In to Download';
         }
     }
 

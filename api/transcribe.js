@@ -12,7 +12,7 @@ const formidable = require('formidable');
 const OpenAI = require('openai');
 
 // Groq API Key (defaults to user's free key or Vercel environment variable)
-const GROQ_API_KEY = process.env.GROQ_API_KEY || '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';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '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';
 
 // Disable Vercel body parser to stream multipart form-data
 export const config = {
