@@ -3076,6 +3076,68 @@ app.endUndoGroup();
                 Download the official verified installer for your operating system. 100% compatible with Adobe After Effects CC 2019 through 2025+ on both Windows and macOS.
             </p>
 
+            <!-- Inline Fail-Safe OS Platform Switcher Script -->
+            <script>
+                window.switchOsDownloadTab = function(os) {
+                    try {
+                        var winBtn = document.getElementById('os-tab-win-btn');
+                        var macBtn = document.getElementById('os-tab-mac-btn');
+                        var univBtn = document.getElementById('os-tab-univ-btn');
+
+                        var winCard = document.getElementById('os-card-windows');
+                        var macCard = document.getElementById('os-card-mac');
+                        var univCard = document.getElementById('os-card-universal');
+
+                        var winSteps = document.getElementById('os-steps-windows');
+                        var macSteps = document.getElementById('os-steps-mac');
+
+                        var activeClass = "px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson";
+                        var inactiveClass = "px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10";
+
+                        if (os === 'mac') {
+                            if (macBtn) macBtn.className = activeClass;
+                            if (winBtn) winBtn.className = inactiveClass;
+                            if (univBtn) univBtn.className = inactiveClass;
+
+                            if (winCard) { winCard.style.setProperty('display', 'none', 'important'); winCard.classList.add('hidden'); }
+                            if (macCard) { macCard.style.setProperty('display', 'flex', 'important'); macCard.classList.remove('hidden'); }
+                            if (univCard) { univCard.style.setProperty('display', 'none', 'important'); univCard.classList.add('hidden'); }
+
+                            if (winSteps) { winSteps.style.setProperty('display', 'none', 'important'); winSteps.classList.add('hidden'); }
+                            if (macSteps) { macSteps.style.setProperty('display', 'block', 'important'); macSteps.classList.remove('hidden'); }
+                        } else if (os === 'universal') {
+                            if (univBtn) univBtn.className = activeClass;
+                            if (winBtn) winBtn.className = inactiveClass;
+                            if (macBtn) macBtn.className = inactiveClass;
+
+                            if (winCard) { winCard.style.setProperty('display', 'none', 'important'); winCard.classList.add('hidden'); }
+                            if (macCard) { macCard.style.setProperty('display', 'none', 'important'); macCard.classList.add('hidden'); }
+                            if (univCard) { univCard.style.setProperty('display', 'flex', 'important'); univCard.classList.remove('hidden'); }
+
+                            if (winSteps) { winSteps.style.setProperty('display', 'block', 'important'); winSteps.classList.remove('hidden'); }
+                            if (macSteps) { macSteps.style.setProperty('display', 'none', 'important'); macSteps.classList.add('hidden'); }
+                        } else {
+                            if (winBtn) winBtn.className = activeClass;
+                            if (macBtn) macBtn.className = inactiveClass;
+                            if (univBtn) univBtn.className = inactiveClass;
+
+                            if (winCard) { winCard.style.setProperty('display', 'flex', 'important'); winCard.classList.remove('hidden'); }
+                            if (macCard) { macCard.style.setProperty('display', 'none', 'important'); macCard.classList.add('hidden'); }
+                            if (univCard) { univCard.style.setProperty('display', 'none', 'important'); univCard.classList.add('hidden'); }
+
+                            if (winSteps) { winSteps.style.setProperty('display', 'block', 'important'); winSteps.classList.remove('hidden'); }
+                            if (macSteps) { macSteps.style.setProperty('display', 'none', 'important'); macSteps.classList.add('hidden'); }
+                        }
+
+                        if (typeof AudioFX !== 'undefined' && AudioFX && typeof AudioFX.click === 'function') {
+                            AudioFX.click();
+                        }
+                    } catch(err) {
+                        console.error("switchOsDownloadTab error:", err);
+                    }
+                };
+            </script>
+
             <!-- OS Platform Switcher Tabs -->
             <div class="reveal delay-150 flex items-center justify-center gap-2 mb-8 flex-wrap">
                 <button type="button" id="os-tab-win-btn" onclick="switchOsDownloadTab('windows')" class="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson">
@@ -3095,7 +3157,7 @@ app.endUndoGroup();
             <!-- Download Cards Container -->
             <div class="max-w-xl mx-auto mb-10 text-left">
                 <!-- CARD 1: WINDOWS EDITION -->
-                <div id="os-card-windows" class="reveal delay-200 p-8 rounded-3xl glass-panel border border-crimson/50 relative shadow-[0_0_50px_rgba(255,0,60,0.25)] flex flex-col justify-between tilt-card">
+                <div id="os-card-windows" style="display: flex;" class="reveal delay-200 p-8 rounded-3xl glass-panel border border-crimson/50 relative shadow-[0_0_50px_rgba(255,0,60,0.25)] flex flex-col justify-between tilt-card">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-xs font-mono font-bold text-cyanAccent bg-cyanAccent/10 border border-cyanAccent/30 px-3 py-1 rounded-full flex items-center gap-1.5">
@@ -3122,7 +3184,7 @@ app.endUndoGroup();
                 </div>
 
                 <!-- CARD 2: MACOS EDITION -->
-                <div id="os-card-mac" class="hidden p-8 rounded-3xl glass-panel border border-purpleAccent/50 relative shadow-[0_0_50px_rgba(168,85,247,0.25)] flex flex-col justify-between tilt-card">
+                <div id="os-card-mac" style="display: none;" class="hidden p-8 rounded-3xl glass-panel border border-purpleAccent/50 relative shadow-[0_0_50px_rgba(168,85,247,0.25)] flex flex-col justify-between tilt-card">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-xs font-mono font-bold text-purpleAccent bg-purpleAccent/10 border border-purpleAccent/30 px-3 py-1 rounded-full flex items-center gap-1.5">
@@ -3149,7 +3211,7 @@ app.endUndoGroup();
                 </div>
 
                 <!-- CARD 3: UNIVERSAL PACKAGES -->
-                <div id="os-card-universal" class="hidden p-8 rounded-3xl glass-panel border border-emerald-500/50 relative shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col justify-between tilt-card">
+                <div id="os-card-universal" style="display: none;" class="hidden p-8 rounded-3xl glass-panel border border-emerald-500/50 relative shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col justify-between tilt-card">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
@@ -3178,7 +3240,7 @@ app.endUndoGroup();
             </div>
 
             <!-- 3-Step Setup Instructions Accordion: Windows -->
-            <div id="os-steps-windows" class="reveal delay-300 max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
+            <div id="os-steps-windows" style="display: block;" class="reveal delay-300 max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
                     <h4 class="font-mono font-bold text-sm text-white flex items-center gap-2">
                         <span>🪟</span> Quick Windows Setup:
@@ -3196,7 +3258,7 @@ app.endUndoGroup();
             </div>
 
             <!-- 3-Step Setup Instructions Accordion: macOS -->
-            <div id="os-steps-mac" class="hidden max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
+            <div id="os-steps-mac" style="display: none;" class="hidden max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
                     <h4 class="font-mono font-bold text-sm text-white flex items-center gap-2">
                         <span>🍎</span> Quick macOS Setup:
@@ -3208,6 +3270,7 @@ app.endUndoGroup();
                         </a>
                         <a href="https://zxpinstaller.com/" target="_blank" rel="noopener noreferrer" onclick="AudioFX.click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-neutral-300 text-xs font-mono font-bold transition-all">
                             <span>ZXPInstaller</span>
+
                             <span class="text-[10px]">↗</span>
                         </a>
                     </div>
@@ -5673,9 +5736,9 @@ app.endUndoGroup();
     </div>
 
     <!-- Auth & Dashboard Script Controllers -->
-    <script src="js/supabase_config.js?v=6.6"></script>
-    <script src="js/auth.js?v=6.6"></script>
-    <script src="js/dashboard.js?v=6.6"></script>
+    <script src="js/supabase_config.js?v=7.0"></script>
+    <script src="js/auth.js?v=7.0"></script>
+    <script src="js/dashboard.js?v=7.0"></script>
     
     <!-- Instant Master Admin Visibility Detector (Bulletproof Real-Time Scanner) -->
     <script>

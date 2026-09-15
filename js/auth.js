@@ -117,9 +117,9 @@
     };
 
     window.switchOsDownloadTab = function (os) {
-        var winTabBtn = document.getElementById('os-tab-win-btn');
-        var macTabBtn = document.getElementById('os-tab-mac-btn');
-        var univTabBtn = document.getElementById('os-tab-univ-btn');
+        var winBtn = document.getElementById('os-tab-win-btn');
+        var macBtn = document.getElementById('os-tab-mac-btn');
+        var univBtn = document.getElementById('os-tab-univ-btn');
 
         var winCard = document.getElementById('os-card-windows');
         var macCard = document.getElementById('os-card-mac');
@@ -128,49 +128,49 @@
         var winSteps = document.getElementById('os-steps-windows');
         var macSteps = document.getElementById('os-steps-mac');
 
-        var activeClasses = 'bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson';
-        var inactiveClasses = 'bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10';
-
-        function setBtnState(btn, isActive) {
-            if (!btn) return;
-            if (isActive) {
-                btn.className = btn.className.replace(/bg-white\/5 text-neutral-400 hover:text-white border-white\/10 hover:bg-white\/10/g, '') + ' ' + activeClasses;
-            } else {
-                btn.className = btn.className.replace(/bg-crimson text-white shadow-\[0_0_20px_rgba\(255,0,60,0\.5\)\] border-crimson/g, '') + ' ' + inactiveClasses;
-            }
-        }
+        var activeClass = "px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson";
+        var inactiveClass = "px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10";
 
         if (os === 'mac') {
-            setBtnState(macTabBtn, true);
-            setBtnState(winTabBtn, false);
-            setBtnState(univTabBtn, false);
-            if (macCard) macCard.classList.remove('hidden');
-            if (winCard) winCard.classList.add('hidden');
-            if (univCard) univCard.classList.add('hidden');
-            if (macSteps) macSteps.classList.remove('hidden');
-            if (winSteps) winSteps.classList.add('hidden');
+            if (macBtn) macBtn.className = activeClass;
+            if (winBtn) winBtn.className = inactiveClass;
+            if (univBtn) univBtn.className = inactiveClass;
+
+            if (winCard) { winCard.style.setProperty('display', 'none', 'important'); winCard.classList.add('hidden'); }
+            if (macCard) { macCard.style.setProperty('display', 'flex', 'important'); macCard.classList.remove('hidden'); }
+            if (univCard) { univCard.style.setProperty('display', 'none', 'important'); univCard.classList.add('hidden'); }
+
+            if (winSteps) { winSteps.style.setProperty('display', 'none', 'important'); winSteps.classList.add('hidden'); }
+            if (macSteps) { macSteps.style.setProperty('display', 'block', 'important'); macSteps.classList.remove('hidden'); }
         } else if (os === 'universal') {
-            setBtnState(univTabBtn, true);
-            setBtnState(winTabBtn, false);
-            setBtnState(macTabBtn, false);
-            if (univCard) univCard.classList.remove('hidden');
-            if (winCard) winCard.classList.add('hidden');
-            if (macCard) macCard.classList.add('hidden');
-            if (winSteps) winSteps.classList.remove('hidden');
-            if (macSteps) macSteps.classList.add('hidden');
+            if (univBtn) univBtn.className = activeClass;
+            if (winBtn) winBtn.className = inactiveClass;
+            if (macBtn) macBtn.className = inactiveClass;
+
+            if (winCard) { winCard.style.setProperty('display', 'none', 'important'); winCard.classList.add('hidden'); }
+            if (macCard) { macCard.style.setProperty('display', 'none', 'important'); macCard.classList.add('hidden'); }
+            if (univCard) { univCard.style.setProperty('display', 'flex', 'important'); univCard.classList.remove('hidden'); }
+
+            if (winSteps) { winSteps.style.setProperty('display', 'block', 'important'); winSteps.classList.remove('hidden'); }
+            if (macSteps) { macSteps.style.setProperty('display', 'none', 'important'); macSteps.classList.add('hidden'); }
         } else {
-            setBtnState(winTabBtn, true);
-            setBtnState(macTabBtn, false);
-            setBtnState(univTabBtn, false);
-            if (winCard) winCard.classList.remove('hidden');
-            if (macCard) macCard.classList.add('hidden');
-            if (univCard) univCard.classList.add('hidden');
-            if (winSteps) winSteps.classList.remove('hidden');
-            if (macSteps) macSteps.classList.add('hidden');
+            if (winBtn) winBtn.className = activeClass;
+            if (macBtn) macBtn.className = inactiveClass;
+            if (univBtn) univBtn.className = inactiveClass;
+
+            if (winCard) { winCard.style.setProperty('display', 'flex', 'important'); winCard.classList.remove('hidden'); }
+            if (macCard) { macCard.style.setProperty('display', 'none', 'important'); macCard.classList.add('hidden'); }
+            if (univCard) { univCard.style.setProperty('display', 'none', 'important'); univCard.classList.add('hidden'); }
+
+            if (winSteps) { winSteps.style.setProperty('display', 'block', 'important'); winSteps.classList.remove('hidden'); }
+            if (macSteps) { macSteps.style.setProperty('display', 'none', 'important'); macSteps.classList.add('hidden'); }
         }
 
-        if (window.AudioFX && typeof AudioFX.click === 'function') AudioFX.click();
+        if (typeof AudioFX !== 'undefined' && AudioFX && typeof AudioFX.click === 'function') {
+            AudioFX.click();
+        }
     };
+
 
     // --- Centralized Download Button Click Handler ---
     window.handleDownloadClick = function (fileUrl, fileName) {
