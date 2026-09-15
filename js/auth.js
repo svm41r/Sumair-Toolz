@@ -106,6 +106,72 @@
         if (emailDisplay) emailDisplay.innerText = user.email;
     }
 
+    // --- Operating System Detection & Tab Switcher ---
+    window.getOperatingSystem = function () {
+        var userAgent = window.navigator.userAgent || '';
+        var platform = window.navigator.platform || '';
+        if (/Mac|iPhone|iPod|iPad/i.test(platform) || /Macintosh|Mac OS X/i.test(userAgent)) {
+            return 'mac';
+        }
+        return 'windows';
+    };
+
+    window.switchOsDownloadTab = function (os) {
+        var winTabBtn = document.getElementById('os-tab-win-btn');
+        var macTabBtn = document.getElementById('os-tab-mac-btn');
+        var univTabBtn = document.getElementById('os-tab-univ-btn');
+
+        var winCard = document.getElementById('os-card-windows');
+        var macCard = document.getElementById('os-card-mac');
+        var univCard = document.getElementById('os-card-universal');
+
+        var winSteps = document.getElementById('os-steps-windows');
+        var macSteps = document.getElementById('os-steps-mac');
+
+        var activeClasses = 'bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson';
+        var inactiveClasses = 'bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10';
+
+        function setBtnState(btn, isActive) {
+            if (!btn) return;
+            if (isActive) {
+                btn.className = btn.className.replace(/bg-white\/5 text-neutral-400 hover:text-white border-white\/10 hover:bg-white\/10/g, '') + ' ' + activeClasses;
+            } else {
+                btn.className = btn.className.replace(/bg-crimson text-white shadow-\[0_0_20px_rgba\(255,0,60,0\.5\)\] border-crimson/g, '') + ' ' + inactiveClasses;
+            }
+        }
+
+        if (os === 'mac') {
+            setBtnState(macTabBtn, true);
+            setBtnState(winTabBtn, false);
+            setBtnState(univTabBtn, false);
+            if (macCard) macCard.classList.remove('hidden');
+            if (winCard) winCard.classList.add('hidden');
+            if (univCard) univCard.classList.add('hidden');
+            if (macSteps) macSteps.classList.remove('hidden');
+            if (winSteps) winSteps.classList.add('hidden');
+        } else if (os === 'universal') {
+            setBtnState(univTabBtn, true);
+            setBtnState(winTabBtn, false);
+            setBtnState(macTabBtn, false);
+            if (univCard) univCard.classList.remove('hidden');
+            if (winCard) winCard.classList.add('hidden');
+            if (macCard) macCard.classList.add('hidden');
+            if (winSteps) winSteps.classList.remove('hidden');
+            if (macSteps) macSteps.classList.add('hidden');
+        } else {
+            setBtnState(winTabBtn, true);
+            setBtnState(macTabBtn, false);
+            setBtnState(univTabBtn, false);
+            if (winCard) winCard.classList.remove('hidden');
+            if (macCard) macCard.classList.add('hidden');
+            if (univCard) univCard.classList.add('hidden');
+            if (winSteps) winSteps.classList.remove('hidden');
+            if (macSteps) macSteps.classList.add('hidden');
+        }
+
+        if (window.AudioFX && typeof AudioFX.click === 'function') AudioFX.click();
+    };
+
     // --- Centralized Download Button Click Handler ---
     window.handleDownloadClick = function (fileUrl, fileName) {
         if (!currentUser) {
@@ -114,8 +180,9 @@
             return false;
         }
 
-        var defaultUrl = 'SumairTools_v6.5.zxp';
-        var defaultName = 'SumairTools_v6.5.zxp';
+        var os = window.getOperatingSystem();
+        var defaultUrl = (os === 'mac') ? 'SumairTools_v7.0_Mac.zip?v=7.0' : 'SumairTools_v7.0_Windows.zip?v=7.0';
+        var defaultName = (os === 'mac') ? 'SumairTools_v7.0_Mac.zip' : 'SumairTools_v7.0_Windows.zip';
         var targetUrl = fileUrl || defaultUrl;
         var targetName = fileName || defaultName;
 
@@ -142,7 +209,7 @@
             navDownloadText.innerText = isAuth ? 'DOWNLOAD v7.0' : 'SIGN IN TO DOWNLOAD';
         }
         if (navDownloadBtn) {
-            navDownloadBtn.title = isAuth ? 'Download Sumair Tools v7.0 (.zxp)' : 'Sign In to Download Sumair Tools';
+            navDownloadBtn.title = isAuth ? 'Download Sumair Tools v7.0' : 'Sign In to Download Sumair Tools';
         }
 
         // 2. Mobile Nav Download Button
@@ -154,19 +221,27 @@
         // 3. Hero Section CTA Button
         var heroDownloadText = document.getElementById('hero-download-btn-text');
         if (heroDownloadText) {
-            heroDownloadText.innerText = isAuth ? 'DOWNLOAD v7.0 (.ZXP)' : 'SIGN IN TO DOWNLOAD';
+            var os = window.getOperatingSystem();
+            heroDownloadText.innerText = isAuth ? (os === 'mac' ? 'DOWNLOAD FOR MAC (.ZIP)' : 'DOWNLOAD FOR WIN (.ZIP)') : 'SIGN IN TO DOWNLOAD';
         }
 
-        // 4. Download Hub Section Card
+        // 4. Download Hub Section Cards
+        var cardWinText = document.getElementById('card-download-win-text');
+        if (cardWinText) cardWinText.innerText = isAuth ? 'DOWNLOAD FOR WINDOWS (1-CLICK)' : 'SIGN IN TO DOWNLOAD (WINDOWS)';
+
+        var cardMacText = document.getElementById('card-download-mac-text');
+        if (cardMacText) cardMacText.innerText = isAuth ? 'DOWNLOAD FOR macOS (1-CLICK)' : 'SIGN IN TO DOWNLOAD (macOS)';
+
+        var cardUniversalText = document.getElementById('card-download-universal-text');
+        if (cardUniversalText) cardUniversalText.innerText = isAuth ? 'DOWNLOAD UNIVERSAL BUNDLE' : 'SIGN IN TO DOWNLOAD (UNIVERSAL)';
+
         var cardZxpText = document.getElementById('card-download-zxp-text');
-        if (cardZxpText) {
-            cardZxpText.innerText = isAuth ? 'DOWNLOAD NOW (.ZXP)' : 'SIGN IN TO DOWNLOAD (.ZXP)';
-        }
+        if (cardZxpText) cardZxpText.innerText = isAuth ? 'DOWNLOAD NOW (.ZXP)' : 'SIGN IN TO DOWNLOAD (.ZXP)';
 
         // 5. Footer Link
         var footerDownloadText = document.getElementById('footer-download-text');
         if (footerDownloadText) {
-            footerDownloadText.innerText = isAuth ? 'Download v7.0 (.ZXP)' : 'Sign In to Download';
+            footerDownloadText.innerText = isAuth ? 'Download v7.0 (Win & Mac)' : 'Sign In to Download';
         }
     }
 
@@ -568,6 +643,13 @@
         } else {
             updateDownloadButtonsState(null);
         }
+
+        // Auto-detect visitor's OS and activate the matching tab
+        try {
+            if (typeof window.switchOsDownloadTab === 'function' && typeof window.getOperatingSystem === 'function') {
+                window.switchOsDownloadTab(window.getOperatingSystem());
+            }
+        } catch (e) {}
 
         // 2. Supabase Live Session Check & Listener
         if (window.sbClient && window.ST_CONFIG && window.ST_CONFIG.isConfigured()) {

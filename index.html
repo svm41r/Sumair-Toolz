@@ -1383,7 +1383,14 @@
                     <span>Generate ExtendScript JSX via integrated AI</span>
                 </span>
             </div>
-            <p class="text-xs sm:text-sm font-mono text-emerald-400 font-bold mt-3.5 animate-pulse">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/15 text-xs font-mono text-neutral-300 mt-2 shadow-inner">
+                <span class="flex items-center gap-1.5 text-cyanAccent font-bold"><span>🪟</span> Windows 10/11</span>
+                <span class="text-neutral-600">&bull;</span>
+                <span class="flex items-center gap-1.5 text-purpleAccent font-bold"><span>🍎</span> macOS (M1-M4 &amp; Intel)</span>
+                <span class="text-neutral-600">&bull;</span>
+                <span class="text-neutral-400">AE CC 2019-2025+</span>
+            </div>
+            <p class="text-xs sm:text-sm font-mono text-emerald-400 font-bold mt-3 animate-pulse">
                 ⚡ Limited Launch Deal: <span class="line-through text-neutral-500">$10</span> <span class="text-emerald-400 font-black text-base">$1</span> Lifetime Access &bull; Zero Recurring Fees
             </p>
         </div>
@@ -3065,49 +3072,150 @@ app.endUndoGroup();
                 <span>Direct Verified Packages</span>
             </div>
             <h2 class="reveal delay-100 font-display font-black text-4xl sm:text-6xl mt-2 mb-4">GET SUMAIR TOOLS NOW</h2>
-            <p class="reveal delay-150 text-neutral-400 max-w-2xl mx-auto text-base sm:text-lg mb-12">
-                Download the official ZXP installer package below. Compatible with Adobe After Effects CC 2019 through 2025+ on both Windows and macOS.
+            <p class="reveal delay-150 text-neutral-400 max-w-2xl mx-auto text-base sm:text-lg mb-8">
+                Download the official verified installer for your operating system. 100% compatible with Adobe After Effects CC 2019 through 2025+ on both Windows and macOS.
             </p>
 
-            <!-- Download Card (Sumair Tools Official ZXP Package) -->
+            <!-- OS Platform Switcher Tabs -->
+            <div class="reveal delay-150 flex items-center justify-center gap-2 mb-8 flex-wrap">
+                <button type="button" id="os-tab-win-btn" onclick="switchOsDownloadTab('windows')" class="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-crimson text-white shadow-[0_0_20px_rgba(255,0,60,0.5)] border-crimson">
+                    <span>🪟</span>
+                    <span>Windows (PC)</span>
+                </button>
+                <button type="button" id="os-tab-mac-btn" onclick="switchOsDownloadTab('mac')" class="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10">
+                    <span>🍎</span>
+                    <span>macOS (Apple Silicon &amp; Intel)</span>
+                </button>
+                <button type="button" id="os-tab-univ-btn" onclick="switchOsDownloadTab('universal')" class="px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-mono font-bold transition-all flex items-center gap-2 cursor-pointer border bg-white/5 text-neutral-400 hover:text-white border-white/10 hover:bg-white/10">
+                    <span>📦</span>
+                    <span>Universal Packages</span>
+                </button>
+            </div>
+
+            <!-- Download Cards Container -->
             <div class="max-w-xl mx-auto mb-10 text-left">
-                <!-- Package: Sumair Tools ZXP -->
-                <div class="reveal delay-200 p-8 rounded-3xl glass-panel border border-crimson/50 relative shadow-[0_0_50px_rgba(255,0,60,0.25)] flex flex-col justify-between tilt-card">
+                <!-- CARD 1: WINDOWS EDITION -->
+                <div id="os-card-windows" class="reveal delay-200 p-8 rounded-3xl glass-panel border border-crimson/50 relative shadow-[0_0_50px_rgba(255,0,60,0.25)] flex flex-col justify-between tilt-card">
                     <div>
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-xs font-mono font-bold text-crimson bg-crimson/10 border border-crimson/30 px-3 py-1 rounded-full">OFFICIAL EXTENSION &bull; LATEST</span>
-                            <span class="font-mono text-xs text-neutral-400">v7.0 &bull; 66.5 MB</span>
+                            <span class="text-xs font-mono font-bold text-cyanAccent bg-cyanAccent/10 border border-cyanAccent/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <span>🪟</span> WINDOWS EDITION &bull; LATEST
+                            </span>
+                            <span class="font-mono text-xs text-neutral-400">v7.0 &bull; 68.2 MB</span>
                         </div>
-                        <h3 class="font-display font-black text-2xl text-white mb-2">SumairTools_v7.0.zxp</h3>
+                        <h3 class="font-display font-black text-2xl text-white mb-2">Sumair Tools for Windows</h3>
                         <p class="text-neutral-300 text-sm mb-6 leading-relaxed">
-                            AI Agent Natural Language JSX, 1-Click Caption Pro (2x &amp; 4x Cadence), Master Tools 9-Point Anchor, Auto Cut Timeline Silence Removal, Comp Saver &amp; <strong class="text-white">📸 SS to Anim (Screenshot to Layered Comp)</strong> with inpainting &amp; easing.
+                            Includes <strong class="text-white">1-Click Automated Installer</strong> (<code class="text-cyanAccent">Install_Sumair_Tools.bat</code> &amp; <code class="text-cyanAccent">install_extension.ps1</code>). Simply double-click to install directly to Adobe CEP extensions with zero manual setup.
                         </p>
                     </div>
                     <div class="space-y-3">
-                        <a href="javascript:void(0)" id="card-download-zxp-btn" onclick="handleDownloadClick('SumairTools_v7.0.zxp?v=7.0', 'SumairTools_v7.0.zxp')" class="btn-crimson py-3.5 px-6 text-sm text-center flex items-center justify-center gap-2.5 font-mono font-bold shadow-[0_0_25px_rgba(255,0,60,0.5)]">
+                        <a href="javascript:void(0)" id="card-download-win-btn" onclick="handleDownloadClick('SumairTools_v7.0_Windows.zip?v=7.0', 'SumairTools_v7.0_Windows.zip')" class="btn-crimson py-3.5 px-6 text-sm text-center flex items-center justify-center gap-2.5 font-mono font-bold shadow-[0_0_25px_rgba(255,0,60,0.5)]">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                            <span id="card-download-zxp-text">SIGN IN TO DOWNLOAD (.ZXP)</span>
+                            <span id="card-download-win-text">SIGN IN TO DOWNLOAD (WINDOWS)</span>
                         </a>
-                        <div class="text-center font-mono text-xs text-neutral-500">
-                            Generic Mirror: <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zxp?v=7.0', 'SumairTools.zxp')" class="text-neutral-400 hover:text-white underline">SumairTools.zxp</a>
+                        <div class="flex items-center justify-center gap-4 text-center font-mono text-xs text-neutral-500 pt-1">
+                            <span>Direct .ZXP: <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zxp?v=7.0', 'SumairTools_v7.0.zxp')" class="text-neutral-400 hover:text-white underline">SumairTools_v7.0.zxp</a></span>
+                            <span>&bull;</span>
+                            <span>Bundle: <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zip?v=7.0', 'SumairTools_v7.0.zip')" class="text-neutral-400 hover:text-white underline">SumairTools_v7.0.zip</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: MACOS EDITION -->
+                <div id="os-card-mac" class="hidden p-8 rounded-3xl glass-panel border border-purpleAccent/50 relative shadow-[0_0_50px_rgba(168,85,247,0.25)] flex flex-col justify-between tilt-card">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono font-bold text-purpleAccent bg-purpleAccent/10 border border-purpleAccent/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <span>🍎</span> macOS EDITION &bull; LATEST
+                            </span>
+                            <span class="font-mono text-xs text-neutral-400">v7.0 &bull; 68.2 MB</span>
+                        </div>
+                        <h3 class="font-display font-black text-2xl text-white mb-2">Sumair Tools for Mac</h3>
+                        <p class="text-neutral-300 text-sm mb-6 leading-relaxed">
+                            Includes <strong class="text-white">1-Click Automated macOS Installer</strong> (<code class="text-purpleAccent">install_mac.command</code> &amp; <code class="text-purpleAccent">install_mac.sh</code>). Double-click in Finder to install into <code class="text-neutral-400 text-xs">~/Library/Application Support/Adobe/CEP/extensions</code> in 2 seconds! Native Apple Silicon (M1/M2/M3/M4) &amp; Intel support.
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <a href="javascript:void(0)" id="card-download-mac-btn" onclick="handleDownloadClick('SumairTools_v7.0_Mac.zip?v=7.0', 'SumairTools_v7.0_Mac.zip')" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-sm text-center flex items-center justify-center gap-2.5 font-mono font-bold transition-all shadow-[0_0_25px_rgba(168,85,247,0.5)] cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span id="card-download-mac-text">SIGN IN TO DOWNLOAD (macOS)</span>
+                        </a>
+                        <div class="flex items-center justify-center gap-4 text-center font-mono text-xs text-neutral-500 pt-1">
+                            <span>Direct .ZXP: <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zxp?v=7.0', 'SumairTools_v7.0.zxp')" class="text-neutral-400 hover:text-white underline">SumairTools_v7.0.zxp</a></span>
+                            <span>&bull;</span>
+                            <span>Bundle: <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zip?v=7.0', 'SumairTools_v7.0.zip')" class="text-neutral-400 hover:text-white underline">SumairTools_v7.0.zip</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3: UNIVERSAL PACKAGES -->
+                <div id="os-card-universal" class="hidden p-8 rounded-3xl glass-panel border border-emerald-500/50 relative shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col justify-between tilt-card">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                                <span>📦</span> UNIVERSAL EDITION &bull; LATEST
+                            </span>
+                            <span class="font-mono text-xs text-neutral-400">v7.0 &bull; 68.2 MB</span>
+                        </div>
+                        <h3 class="font-display font-black text-2xl text-white mb-2">Universal Adobe CEP Packages</h3>
+                        <p class="text-neutral-300 text-sm mb-6 leading-relaxed">
+                            Complete cross-platform packages compatible with all Adobe CEP managers, automated scripts, and multi-operating system production studios.
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <a href="javascript:void(0)" id="card-download-universal-btn" onclick="handleDownloadClick('SumairTools_v7.0.zip?v=7.0', 'SumairTools_v7.0.zip')" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm text-center flex items-center justify-center gap-2.5 font-mono font-bold transition-all shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span id="card-download-universal-text">SIGN IN TO DOWNLOAD (UNIVERSAL)</span>
+                        </a>
+                        <div class="grid grid-cols-2 gap-2 text-center font-mono text-xs pt-1">
+                            <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0.zxp?v=7.0', 'SumairTools_v7.0.zxp')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white border border-white/10 transition-colors">⚡ Universal .ZXP</a>
+                            <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0_Windows.zip?v=7.0', 'SumairTools_v7.0_Windows.zip')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-cyanAccent hover:text-white border border-white/10 transition-colors">🪟 Windows .ZIP</a>
+                            <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools_v7.0_Mac.zip?v=7.0', 'SumairTools_v7.0_Mac.zip')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-purpleAccent hover:text-white border border-white/10 transition-colors">🍎 macOS .ZIP</a>
+                            <a href="javascript:void(0)" onclick="handleDownloadClick('SumairTools.zxp?v=7.0', 'SumairTools.zxp')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white border border-white/10 transition-colors">Generic Mirror</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3-Step Setup Instructions Accordion with Official ZXP Installer Link -->
-            <div class="reveal delay-300 max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
+            <!-- 3-Step Setup Instructions Accordion: Windows -->
+            <div id="os-steps-windows" class="reveal delay-300 max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
-                    <h4 class="font-mono font-bold text-sm text-white">Quick Installation Steps:</h4>
+                    <h4 class="font-mono font-bold text-sm text-white flex items-center gap-2">
+                        <span>🪟</span> Quick Windows Setup:
+                    </h4>
                     <a href="https://updates.aescripts.com/win/aescripts%20+%20aeplugins%20desktop%20apps%20%28setup%29.exe" target="_blank" rel="noopener noreferrer" onclick="AudioFX.click()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyanAccent/10 hover:bg-cyanAccent/20 border border-cyanAccent/40 text-cyanAccent text-xs font-mono font-bold transition-all hover:scale-105 shadow-sm">
-                        <span>📥 Download ZXP Installer</span>
+                        <span>📥 ZXP Installer (Windows .exe)</span>
                         <span class="text-[10px]">↗</span>
                     </a>
                 </div>
                 <ol class="space-y-2.5 font-mono text-xs text-neutral-300 list-decimal list-inside">
-                    <li><span class="text-white font-semibold">Step 1:</span> Download and open <a href="https://updates.aescripts.com/win/aescripts%20+%20aeplugins%20desktop%20apps%20%28setup%29.exe" target="_blank" rel="noopener noreferrer" class="text-cyanAccent font-bold hover:underline">ZXP Installer (aescripts)</a>, then drag and drop <code class="text-crimson font-bold">SumairTools_v7.0.zxp</code> directly into it.</li>
-                    <li><span class="text-white font-semibold">Step 2:</span> Restart <span class="text-white font-semibold">Adobe After Effects</span>.</li>
-                    <li><span class="text-white font-semibold">Step 3:</span> In AE's top menu, navigate to: <code class="text-emerald-400 font-bold">Window &gt; Extensions &gt; Sumair Tools</code> to launch and activate!</li>
+                    <li><span class="text-white font-semibold">1-Click Install:</span> Unzip <code class="text-cyanAccent font-bold">SumairTools_v7.0_Windows.zip</code> and double-click <code class="text-cyanAccent font-bold">Install_Sumair_Tools.bat</code>.</li>
+                    <li><span class="text-white font-semibold">Alternative:</span> Drag &amp; drop <code class="text-crimson font-bold">SumairTools_v7.0.zxp</code> into <a href="https://updates.aescripts.com/win/aescripts%20+%20aeplugins%20desktop%20apps%20%28setup%29.exe" target="_blank" rel="noopener noreferrer" class="text-cyanAccent font-bold hover:underline">aescripts ZXP Installer</a>.</li>
+                    <li><span class="text-white font-semibold">Launch in AE:</span> Restart After Effects ➔ Go to <code class="text-emerald-400 font-bold">Window &gt; Extensions &gt; Sumair Tools</code>!</li>
+                </ol>
+            </div>
+
+            <!-- 3-Step Setup Instructions Accordion: macOS -->
+            <div id="os-steps-mac" class="hidden max-w-xl mx-auto p-6 rounded-2xl bg-black/60 border border-white/10 text-left hover:border-white/20 transition-all">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+                    <h4 class="font-mono font-bold text-sm text-white flex items-center gap-2">
+                        <span>🍎</span> Quick macOS Setup:
+                    </h4>
+                    <div class="flex items-center gap-2">
+                        <a href="https://updates.aescripts.com/mac/aescripts%20+%20aeplugins%20desktop%20app%20%28installer%29.dmg" target="_blank" rel="noopener noreferrer" onclick="AudioFX.click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purpleAccent/10 hover:bg-purpleAccent/20 border border-purpleAccent/40 text-purpleAccent text-xs font-mono font-bold transition-all hover:scale-105 shadow-sm">
+                            <span>📥 ZXP Installer (Mac .dmg)</span>
+                            <span class="text-[10px]">↗</span>
+                        </a>
+                        <a href="https://zxpinstaller.com/" target="_blank" rel="noopener noreferrer" onclick="AudioFX.click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-neutral-300 text-xs font-mono font-bold transition-all">
+                            <span>ZXPInstaller</span>
+                            <span class="text-[10px]">↗</span>
+                        </a>
+                    </div>
+                </div>
+                <ol class="space-y-2.5 font-mono text-xs text-neutral-300 list-decimal list-inside">
+                    <li><span class="text-white font-semibold">1-Click Install:</span> Unzip <code class="text-purpleAccent font-bold">SumairTools_v7.0_Mac.zip</code> and double-click <code class="text-purpleAccent font-bold">install_mac.command</code> in Finder!</li>
+                    <li><span class="text-white font-semibold">Alternative:</span> Drag &amp; drop <code class="text-crimson font-bold">SumairTools_v7.0.zxp</code> into <a href="https://updates.aescripts.com/mac/aescripts%20+%20aeplugins%20desktop%20app%20%28installer%29.dmg" target="_blank" rel="noopener noreferrer" class="text-purpleAccent font-bold hover:underline">aescripts ZXP Installer for Mac</a>.</li>
+                    <li><span class="text-white font-semibold">Launch in AE:</span> Restart After Effects ➔ Go to <code class="text-emerald-400 font-bold">Window &gt; Extensions &gt; Sumair Tools</code>!</li>
                 </ol>
             </div>
 
@@ -5363,19 +5471,27 @@ app.endUndoGroup();
                     </a>
                 </div>
 
-                <!-- Downloads Section -->
+                <!-- Downloads Section: Windows, Mac, & ZXP -->
                 <div class="flex flex-col gap-2 pt-1">
-                    <a href="SumairTools_v7.0.zxp?v=7.0" download="SumairTools_v7.0.zxp" onclick="AudioFX.success()" class="btn-crimson py-3 px-4 text-xs text-center flex items-center justify-center gap-2 font-mono font-bold tracking-wide">
-                        <span>⚡ DOWNLOAD SumairTools_v7.0.zxp</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <a href="SumairTools_v7.0_Windows.zip?v=7.0" download="SumairTools_v7.0_Windows.zip" onclick="AudioFX.success()" class="btn-crimson py-3 px-3 text-xs text-center flex items-center justify-center gap-2 font-mono font-bold tracking-wide">
+                            <span>🪟 Windows (.ZIP)</span>
+                        </a>
+                        <a href="SumairTools_v7.0_Mac.zip?v=7.0" download="SumairTools_v7.0_Mac.zip" onclick="AudioFX.success()" class="py-3 px-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs text-center flex items-center justify-center gap-2 font-mono font-bold tracking-wide transition-all shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+                            <span>🍎 macOS (.ZIP)</span>
+                        </a>
+                    </div>
+                    <a href="SumairTools_v7.0.zxp?v=7.0" download="SumairTools_v7.0.zxp" onclick="AudioFX.success()" class="py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-neutral-300 hover:text-white text-xs text-center flex items-center justify-center gap-2 font-mono font-bold tracking-wide transition-colors">
+                        <span>⚡ Direct Universal .ZXP (Win &amp; Mac)</span>
                     </a>
                 </div>
 
                 <!-- Easy Setup Guide -->
                 <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-left font-mono text-[10px] text-neutral-400 leading-relaxed">
-                    <span class="text-white font-bold block mb-1">⚡ Quick Activation Steps:</span>
-                    1. Install the <code class="text-crimson font-bold">.zxp</code> using ZXP Installer via ZXP Installer.<br>
-                    2. Join our Discord server above to get your $1 launch license key from Sumair.<br>
-                    3. Open After Effects ➔ Window ➔ Extensions ➔ Sumair Tools & activate!
+                    <span class="text-white font-bold block mb-1">⚡ Quick Setup Guide:</span>
+                    • <strong class="text-cyanAccent">Windows:</strong> Unzip and double-click <code class="text-white">Install_Sumair_Tools.bat</code>.<br>
+                    • <strong class="text-purpleAccent">macOS:</strong> Unzip and double-click <code class="text-white">install_mac.command</code> in Finder.<br>
+                    • Join Discord above for your $1 launch license key, restart After Effects, and open <code class="text-emerald-400">Window &gt; Extensions &gt; Sumair Tools</code>!
                 </div>
             </div>
         </div>
